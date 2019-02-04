@@ -41,20 +41,7 @@ package_fetch_upstream_pkgfiles() {
   mv "$pkgbase"/* .arch/
   rm -rf "$pkgbase"
 
-  # fetch upstream pkgbuilds from parabola
-  mkdir -p .parabola
-  local src url=https://www.parabola.nu/packages/libre/x86_64/$1/
-  if ! curl -sL "$url" | grep -iq 'not found'; then
-    src=$(curl -sL "$url" | grep -i 'source files' | cut -d'"' -f2 | sed 's#/tree/#/plain/#')
-    for link in $(curl -sL "$src" | grep '^  <li><a href' | cut -d"'" -f2 \
-        | sed "s#^#$(echo "$src" | awk -F/ '{print $3}')#"); do
-      wget -q "$link" -O .parabola/"$(basename "${link%\?*}")";
-    done
-  fi
-
-  if [ -f .parabola/PKGBUILD ]; then
-    cp -v .parabola/* .
-  elif [ -f .arch/PKGBUILD ]; then
+  if [ -f .arch/PKGBUILD ]; then
     cp -v .arch/* .
   else
     return "$ERROR_MISSING"
