@@ -1,9 +1,10 @@
---- a/PKGBUILD	2018-02-18 23:23:07.453665980 +0100
-+++ b/PKGBUILD	2018-02-18 23:26:47.533891725 +0100
-@@ -25,7 +25,7 @@ prepare() {
- 
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-23 16:03:20.222090436 +0300
++++ b/PKGBUILD	2019-01-23 16:03:39.608042663 +0300
+@@ -20,7 +20,7 @@ validpgpkeys=('7DF84374B1EE1F9764BBE25D0
  build() {
-   cd ${srcdir}/${pkgname}-${pkgver}  
+   cd "${srcdir}/${pkgname}-${pkgver}"
+ 
 -  ./configure --prefix=/usr --datadir=/usr/share
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --datadir=/usr/share
    make
