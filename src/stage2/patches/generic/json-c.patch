@@ -1,11 +1,11 @@
---- a/PKGBUILD	2018-02-16 08:12:27.566594016 +0100
-+++ b/PKGBUILD	2018-02-16 08:12:14.006475850 +0100
-@@ -17,7 +17,7 @@ sha256sums=('26e642456caab38aa9459279b97
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-25 11:21:38.044725300 +0300
++++ b/PKGBUILD	2019-01-25 11:21:55.244081861 +0300
+@@ -30,6 +30,7 @@ prepare() {
  build() {
-   cd $pkgname-$pkgname-$pkgver-20171207
-   CFLAGS="$CFLAGS -Wno-error"
--  ./configure --prefix=/usr --disable-static
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --disable-static
-   make
- }
- 
+   cd json-c
+   ./configure \
++    --host=@CHOST@ --build=@BUILDHOST@ \
+     --prefix=/usr \
+     --disable-static \
+     --enable-threading
