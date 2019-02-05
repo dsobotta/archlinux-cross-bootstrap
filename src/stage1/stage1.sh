@@ -36,7 +36,7 @@ check_cross_toolchain() {
 
   echo -n "checking for $CHOST linux api headers ... "
   local have_headers=yes
-  [ -e "$sysroot"/include/linux/kernel.h ] || have_headers=no
+  [ -e "$sysroot"/usr/include/linux/kernel.h ] || have_headers=no
   echo $have_headers
   [ "x$have_headers" == "xyes" ] || return 1
 

@@ -26,7 +26,7 @@ build() {
       --disable-werror
       --enable-shared
       --enable-obsolete-rpc
-      --with-headers=/usr/$_target/include
+      --with-headers=/usr/$_target/usr/include
       --@MULTILIB@-multilib
       --enable-kernel=3.0.0
   )
