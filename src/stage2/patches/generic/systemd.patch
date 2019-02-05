@@ -1,28 +1,22 @@
 diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-05-19 05:41:56.090214301 +0200
-+++ b/PKGBUILD	2018-05-19 05:46:32.520217057 +0200
-@@ -24,7 +24,7 @@ makedepends=('acl' 'cryptsetup' 'docbook
-              'meson' 'libseccomp' 'pcre2')
- makedepends_i686=('gnu-efi-libs')
- makedepends_x86_64=('gnu-efi-libs')
+--- a/PKGBUILD	2019-01-29 01:23:12.877313492 +0300
++++ b/PKGBUILD	2019-01-29 10:49:29.378805039 +0300
+@@ -14,9 +14,9 @@ makedepends=('acl' 'cryptsetup' 'docbook
+              'intltool' 'iptables' 'kmod' 'libcap' 'libidn2' 'libgcrypt'
+              'libmicrohttpd' 'libxslt' 'util-linux' 'linux-api-headers'
+              'python-lxml' 'quota-tools' 'shadow' 'gnu-efi-libs' 'git'
+-             'meson' 'libseccomp' 'pcre2' 'audit' 'kexec-tools' 'libxkbcommon'
++             'meson' 'libseccomp' 'pcre2' 'kexec-tools' 'libxkbcommon'
+              'bash-completion')
 -options=('strip')
-+depends=('libutil-linux' 'pcre2' 'libidn' 'libseccomp' 'kmod')
++depends=('util-linux' 'libutil-linux' 'pcre2' 'libidn' 'libseccomp' 'kmod')
  validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'  # Lennart Poettering <lennart@poettering.net>
                '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E') # Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
- source=('git+https://github.com/systemd/systemd-stable'
-@@ -85,6 +85,8 @@ sha512sums=('SKIP'
- _backports=(
-   # nspawn: wait for network namespace creation before interface setup (#8633)
-   '7511655807e90aa33ea7b71991401a79ec36bb41'
-+  # basic/macros: rename noreturn into _noreturn_ (#8456)
-+  '848e863acc51ecfb0f3955c498874588201d9130'
- )
+ source=(# fragment is latest tag for source verification, final merge in prepare()
+@@ -103,6 +103,20 @@ pkgver() {
+ }
  
- _reverts=(
-@@ -163,10 +165,30 @@ build() {
-     CXXFLAGS+=" -fno-lto"
-   fi
- 
+ build() {
 +  cat > cross-file << EOF
 +[binaries]
 +c = '@CHOST@-gcc'
@@ -37,9 +31,17 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 +endian = 'little'
 +EOF
 +
-   local meson_options=(
-     -Daudit=false
+   local _timeservers=({0..3}.arch.pool.ntp.org)
+   local _nameservers=(
+     # We use these public name services, ordered by their
+@@ -119,10 +133,17 @@ build() {
+   )
+ 
+   local _meson_options=(
+-    -Dgnu-efi=true
++    -Dgnu-efi=false
      -Dima=false
+     -Dlibidn2=true
      -Dlz4=true
 +    -Dlibcryptsetup=false
 +    -Dlibiptc=false
@@ -47,54 +49,73 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 +    -Dlibcurl=false
 +    -Dman=false
 +    -Dtests=false
++    -Daudit=false
  
      -Ddbuspolicydir=/usr/share/dbus-1/system.d
-     -Ddefault-dnssec=no
-@@ -183,7 +205,7 @@ build() {
-     meson_options+=(-Dgnuefi=true)
-   fi
+     -Ddefault-hierarchy=hybrid
+@@ -136,7 +157,9 @@ build() {
+     -Dsysvrcnd-path=
+   )
  
--  arch-meson "$pkgbase-stable" build "${meson_options[@]}"
-+  arch-meson "$pkgbase-stable" build "${meson_options[@]}" --cross-file cross-file
+-  arch-meson "$pkgbase-stable" build "${_meson_options[@]}"
++  export PKG_CONFIG_LIBDIR="@SYSROOT@/usr/lib/pkgconfig"
++  export PKG_CONFIG_SYSROOT_DIR="@SYSROOT@"
++  arch-meson "$pkgbase-stable" build "${_meson_options[@]}" --cross-file cross-file
  
    ninja -C build
- 
-@@ -198,28 +220,21 @@ build() {
-   mv -T "$srcdir/dest"/{systemd,libsystemd}/usr/include/systemd
-   mv -T "$srcdir/dest"/{systemd,libsystemd}/usr/lib/pkgconfig/libsystemd.pc
-   mv "$srcdir/dest"/systemd/usr/lib/libsystemd.so*      -t "$srcdir/dest"/libsystemd/usr/lib/
--  mv "$srcdir/dest"/systemd/usr/share/man/man3/{SD,sd}* -t "$srcdir/dest"/libsystemd/usr/share/man/man3/
- 
-   install -dm755 "$srcdir/dest/libudev"/usr/{lib/pkgconfig,share/man/man3,include}
-   mv -T "$srcdir/dest"/{systemd,libudev}/usr/include/libudev.h
-   mv -T "$srcdir/dest"/{systemd,libudev}/usr/lib/pkgconfig/libudev.pc
-   mv "$srcdir/dest"/systemd/usr/lib/libudev.so*       -t "$srcdir/dest"/libudev/usr/lib/
--  mv "$srcdir/dest"/systemd/usr/share/man/man3/*udev* -t "$srcdir/dest"/libudev/usr/share/man/man3/
- 
-   local nssmodule
-   for nssmodule in systemd myhostname mymachines resolve; do
-     install -dm755 "$srcdir/dest/nss-$nssmodule"/usr/{lib,share/man/man8}
--    mv -t "$srcdir/dest"/nss-$nssmodule/usr/share/man/man8/ -- \
--       "$srcdir/dest"/systemd/usr/share/man/man8/nss-$nssmodule.8 \
--       "$srcdir/dest"/systemd/usr/share/man/man8/libnss_$nssmodule.*.8
-     mv "$srcdir/dest"/systemd/usr/lib/libnss_$nssmodule.so* -t "$srcdir/dest"/nss-$nssmodule/usr/lib/
-   done
- 
-   install -dm755 "$srcdir/dest/systemd-sysvcompat"/usr/share/man/man8
--  mv "$srcdir/dest/systemd"/usr/share/man/man8/{halt,poweroff,reboot,runlevel,shutdown,telinit}.8 \
--     -t "$srcdir/dest/systemd-sysvcompat"/usr/share/man/man8
- 
--  rmdir "$srcdir/dest"/systemd/usr/{share/man/man3,lib/pkgconfig,include}
-+  rm -rf "$srcdir/dest"/systemd/usr/{share/man/man3,lib/pkgconfig,include}
  }
- 
- check() {
-@@ -261,7 +276,7 @@ package_systemd() {
+@@ -151,7 +174,7 @@ package_systemd() {
+   groups=('base-devel')
+   depends=('acl' 'bash' 'cryptsetup' 'dbus' 'iptables' 'kbd' 'kmod' 'hwids' 'libcap'
+            'libgcrypt' 'libsystemd' 'libidn2' 'lz4' 'pam' 'libelf' 'libseccomp'
+-           'util-linux' 'xz' 'pcre2' 'audit')
++           'util-linux' 'xz' 'pcre2')
+   provides=('nss-myhostname' "systemd-tools=$pkgver" "udev=$pkgver")
+   replaces=('nss-myhostname' 'systemd-tools' 'udev')
+   conflicts=('nss-myhostname' 'systemd-tools' 'udev')
+@@ -180,20 +203,20 @@ package_systemd() {
    rm -rv "$pkgdir"/etc/systemd/system/*
  
    # we'll create this on installation
 -  rmdir "$pkgdir"/var/log/journal/remote
 +  rm -rf "$pkgdir"/var/log/journal/remote
  
+   # runtime libraries shipped with libsystemd
+   install -d -m0755 libsystemd
+   mv "$pkgdir"/usr/lib/lib{nss,systemd,udev}*.so* libsystemd
+ 
+   # manpages shipped with systemd-sysvcompat
+-  rm "$pkgdir"/usr/share/man/man8/{halt,poweroff,reboot,runlevel,shutdown,telinit}.8
++  rm -f "$pkgdir"/usr/share/man/man8/{halt,poweroff,reboot,runlevel,shutdown,telinit}.8
+ 
    # executable (symlinks) shipped with systemd-sysvcompat
    rm "$pkgdir"/usr/bin/{halt,init,poweroff,reboot,runlevel,shutdown,telinit}
+ 
+   # files shipped with systemd-resolvconf
+-  rm "$pkgdir"/usr/{bin/resolvconf,share/man/man1/resolvconf.1}
++  rm -f "$pkgdir"/usr/{bin/resolvconf,share/man/man1/resolvconf.1}
+ 
+   # avoid a potential conflict with [core]/filesystem
+   rm "$pkgdir"/usr/share/factory/etc/nsswitch.conf
+@@ -252,8 +275,8 @@ package_systemd-resolvconf() {
+   install -d -m0755 "$pkgdir"/usr/bin
+   ln -s resolvectl "$pkgdir"/usr/bin/resolvconf
+ 
+-  install -d -m0755 "$pkgdir"/usr/share/man/man1
+-  ln -s resolvectl.1.gz "$pkgdir"/usr/share/man/man1/resolvconf.1.gz
++  #install -d -m0755 "$pkgdir"/usr/share/man/man1
++  #ln -s resolvectl.1.gz "$pkgdir"/usr/share/man/man1/resolvconf.1.gz
+ }
+ 
+ package_systemd-sysvcompat() {
+@@ -263,8 +286,8 @@ package_systemd-sysvcompat() {
+   conflicts=('sysvinit')
+   depends=('systemd')
+ 
+-  install -D -m0644 -t "$pkgdir"/usr/share/man/man8 \
+-    build/man/{telinit,halt,reboot,poweroff,runlevel,shutdown}.8
++  #install -D -m0644 -t "$pkgdir"/usr/share/man/man8 \
++  #  build/man/{telinit,halt,reboot,poweroff,runlevel,shutdown}.8
+ 
+   install -d -m0755 "$pkgdir"/usr/bin
+   ln -s ../lib/systemd/systemd "$pkgdir"/usr/bin/init
