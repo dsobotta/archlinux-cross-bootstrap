@@ -1,0 +1,14 @@
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-11-08 14:53:38.000000000 +0300
++++ b/PKGBUILD	2019-02-05 18:25:40.515998966 +0300
+@@ -15,8 +15,8 @@ build() {
+   cd "$srcdir/$pkgname-$pkgver"
+   # AIO library is a thin wrapper around kernel syscalls, it does not use stdlib
+   # and other helpers like stack protection libraries
+-  CFLAGS="-march=${CARCH/_/-} -mtune=generic -O2 -pipe"
+-  make
++  CFLAGS="@PLATFORM_CFLAGS@ -O2 -pipe"
++  make CC=@CHOST@-gcc
+ }
+ 
+ check() {
