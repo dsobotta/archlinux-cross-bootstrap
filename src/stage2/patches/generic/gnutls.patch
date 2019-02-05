@@ -1,11 +1,15 @@
---- a/PKGBUILD	2018-02-21 15:03:51.826746352 +0100
-+++ b/PKGBUILD	2018-02-21 15:11:06.745631750 +0100
-@@ -34,6 +34,8 @@ build() {
-   # http://lists.gnupg.org/pipermail/gnutls-devel/2015-May/007582.html
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-27 16:44:24.000000000 +0300
++++ b/PKGBUILD	2019-02-05 17:39:41.176098865 +0300
+@@ -21,7 +21,11 @@ validpgpkeys=('0424D4EE81A0E3D119C6F835E
  
+ build() {
+   cd ${pkgname}-${pkgver}
++  export PKG_CONFIG_LIBDIR="@SYSROOT@/usr/lib/pkgconfig"
++  export PKG_CONFIG_SYSROOT_DIR="@SYSROOT@"
    ./configure --prefix=/usr \
 +	--host=@CHOST@ --build=@BUILDHOST@ \
 +	--with-libunistring-prefix=@SYSROOT@/usr \
  	--with-zlib \
  	--disable-static \
- 	--without-idn \
+ 	--with-idn \
