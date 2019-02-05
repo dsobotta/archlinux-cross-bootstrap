@@ -1,16 +1,16 @@
 diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-05-19 19:55:02.590725028 +0200
-+++ b/PKGBUILD	2018-05-19 19:58:21.434060348 +0200
-@@ -4,7 +4,7 @@
+--- a/PKGBUILD	2019-01-23 23:01:32.170731545 +0300
++++ b/PKGBUILD	2019-01-24 02:01:16.900415240 +0300
+@@ -3,7 +3,7 @@
  # Contributor: Sarah Hay <sarah@archlinux.org>
  
  pkgbase=gpgme
 -pkgname=(gpgme qgpgme python-gpgme python2-gpgme)
 +pkgname=(gpgme)
- pkgver=1.11.1
+ pkgver=1.12.0
  pkgrel=1
  pkgdesc="A C wrapper library for GnuPG"
-@@ -20,6 +20,7 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB52
+@@ -19,9 +19,11 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB52
  build() {
    cd ${pkgbase}-${pkgver}
    ./configure \
@@ -18,7 +18,11 @@ diff -rupN a/PKGBUILD b/PKGBUILD
      --prefix=/usr \
      --disable-fd-passing \
      --disable-static \
-@@ -40,9 +41,9 @@ package_gpgme() {
++    --disable-gpg-test \
+     --disable-gpgsm-test
+   make
+ }
+@@ -39,9 +41,9 @@ package_gpgme() {
    make DESTDIR="${pkgdir}" install
  
    # split qgpgme
