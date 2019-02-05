@@ -1,0 +1,16 @@
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-25 09:36:34.000000000 +0300
++++ b/PKGBUILD	2019-02-05 21:25:35.259817828 +0300
+@@ -45,6 +45,12 @@ package() {
+   ./zic -d ${pkgdir}/usr/share/zoneinfo -p America/New_York
+   install -m444 -t ${pkgdir}/usr/share/zoneinfo iso3166.tab zone1970.tab zone.tab # zone.tab is depricated and will go soon
+   
++  # build and install native binaries
++  make clean_misc
++  make CC=@CHOST@-gcc
++  cp tzselect zdump zic "${pkgdir}/usr/bin/"
++  cp libtz.a "${pkgdir}/usr/lib/"
++  
+   # cleanup
+   rm "${pkgdir}/etc/localtime"
+ }
