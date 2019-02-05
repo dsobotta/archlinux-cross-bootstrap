@@ -1,0 +1,118 @@
+diff -rupN a/fix-riscv-headers.patch b/fix-riscv-headers.patch
+--- a/fix-riscv-headers.patch	1970-01-01 03:00:00.000000000 +0300
++++ b/fix-riscv-headers.patch	2019-02-05 11:16:31.185571792 +0300
+@@ -0,0 +1,76 @@
++diff -rupN a/arch/riscv/include/asm/unistd.h b/arch/riscv/include/asm/unistd.h
++--- a/arch/riscv/include/asm/unistd.h	2018-07-28 08:57:19.000000000 +0300
+++++ b/arch/riscv/include/asm/unistd.h	2019-02-05 11:11:56.936152544 +0300
++@@ -13,4 +13,3 @@
++ 
++ #define __ARCH_WANT_SYS_CLONE
++ #include <uapi/asm/unistd.h>
++-#include <uapi/asm/syscalls.h>
++diff -rupN a/arch/riscv/include/uapi/asm/Kbuild b/arch/riscv/include/uapi/asm/Kbuild
++--- a/arch/riscv/include/uapi/asm/Kbuild	2018-07-28 08:57:19.000000000 +0300
+++++ b/arch/riscv/include/uapi/asm/Kbuild	2019-02-05 11:13:32.292472889 +0300
++@@ -2,7 +2,6 @@
++ include include/uapi/asm-generic/Kbuild.asm
++ 
++ generic-y += setup.h
++-generic-y += unistd.h
++ generic-y += bpf_perf_event.h
++ generic-y += errno.h
++ generic-y += fcntl.h
++diff -rupN a/arch/riscv/include/uapi/asm/syscalls.h b/arch/riscv/include/uapi/asm/syscalls.h
++--- a/arch/riscv/include/uapi/asm/syscalls.h	2018-07-28 08:57:19.000000000 +0300
+++++ b/arch/riscv/include/uapi/asm/syscalls.h	1970-01-01 03:00:00.000000000 +0300
++@@ -1,26 +0,0 @@
++-/* SPDX-License-Identifier: GPL-2.0 */
++-/*
++- * Copyright (C) 2017 SiFive
++- */
++-
++-#ifndef _ASM__UAPI__SYSCALLS_H
++-#define _ASM__UAPI__SYSCALLS_H
++-
++-/*
++- * Allows the instruction cache to be flushed from userspace.  Despite RISC-V
++- * having a direct 'fence.i' instruction available to userspace (which we
++- * can't trap!), that's not actually viable when running on Linux because the
++- * kernel might schedule a process on another hart.  There is no way for
++- * userspace to handle this without invoking the kernel (as it doesn't know the
++- * thread->hart mappings), so we've defined a RISC-V specific system call to
++- * flush the instruction cache.
++- *
++- * __NR_riscv_flush_icache is defined to flush the instruction cache over an
++- * address range, with the flush applying to either all threads or just the
++- * caller.  We don't currently do anything with the address range, that's just
++- * in there for forwards compatibility.
++- */
++-#define __NR_riscv_flush_icache (__NR_arch_specific_syscall + 15)
++-__SYSCALL(__NR_riscv_flush_icache, sys_riscv_flush_icache)
++-
++-#endif
++diff -rupN a/arch/riscv/include/uapi/asm/unistd.h b/arch/riscv/include/uapi/asm/unistd.h
++--- a/arch/riscv/include/uapi/asm/unistd.h	1970-01-01 03:00:00.000000000 +0300
+++++ b/arch/riscv/include/uapi/asm/unistd.h	2019-02-05 11:11:56.936152544 +0300
++@@ -0,0 +1,23 @@
+++/* SPDX-License-Identifier: GPL-2.0 */
+++/*
+++ * Copyright (C) 2017 SiFive
+++ */
+++
+++#include <asm-generic/unistd.h>
+++
+++/*
+++ * Allows the instruction cache to be flushed from userspace.  Despite RISC-V
+++ * having a direct 'fence.i' instruction available to userspace (which we
+++ * can't trap!), that's not actually viable when running on Linux because the
+++ * kernel might schedule a process on another hart.  There is no way for
+++ * userspace to handle this without invoking the kernel (as it doesn't know the
+++ * thread->hart mappings), so we've defined a RISC-V specific system call to
+++ * flush the instruction cache.
+++ *
+++ * __NR_riscv_flush_icache is defined to flush the instruction cache over an
+++ * address range, with the flush applying to either all threads or just the
+++ * caller.  We don't currently do anything with the address range, that's just
+++ * in there for forwards compatibility.
+++ */
+++#define __NR_riscv_flush_icache (__NR_arch_specific_syscall + 15)
+++__SYSCALL(__NR_riscv_flush_icache, sys_riscv_flush_icache)
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-09-11 21:53:17.000000000 +0300
++++ b/PKGBUILD	2019-02-05 11:16:31.185571792 +0300
+@@ -10,22 +10,30 @@ pkgdesc='Kernel headers sanitized for us
+ arch=(any)
+ url='http://www.gnu.org/software/libc'
+ license=(GPL2)
+-source=(https://www.kernel.org/pub/linux/kernel/v4.x/linux-${pkgver}.tar.{xz,sign})
++source=(https://www.kernel.org/pub/linux/kernel/v4.x/linux-${pkgver}.tar.{xz,sign}
++        fix-riscv-headers.patch)
+ md5sums=('4bc2fc2eb9dc8188525f575263ada3f3'
+-         'SKIP')
++         'SKIP'
++         '32215109423202a36466ceaf152bde7a')
+ validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'   # Linus Torvalds
+               '647F28654894E3BD457199BE38DBBDC86092693E')  # Greg Kroah-Hartman
+ 
++prepare() {
++  cd linux-$pkgver
++
++  patch -p1 -i "$srcdir/fix-riscv-headers.patch"
++}
++
+ build() {
+   cd linux-$pkgver
+ 
+   make mrproper
+-  make headers_check
++  make ARCH=@LINUX_ARCH@ CROSS_COMPILE=@CHOST@- headers_check
+ }
+ 
+ package() {
+   cd linux-$pkgver
+-  make INSTALL_HDR_PATH="$pkgdir/usr" headers_install
++  make INSTALL_HDR_PATH="$pkgdir/usr" ARCH=@LINUX_ARCH@ CROSS_COMPILE=@CHOST@- headers_install
+ 
+   # use headers from libdrm
+   rm -r "$pkgdir/usr/include/drm"
