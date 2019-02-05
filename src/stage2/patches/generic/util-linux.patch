@@ -1,6 +1,7 @@
---- a/PKGBUILD	2018-02-21 21:08:31.805898301 +0100
-+++ b/PKGBUILD	2018-02-21 21:36:01.371436135 +0100
-@@ -13,7 +13,7 @@ url="https://www.kernel.org/pub/linux/ut
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-29 01:28:04.406090964 +0300
++++ b/PKGBUILD	2019-01-29 01:37:25.770910696 +0300
+@@ -12,7 +12,7 @@ url="https://www.kernel.org/pub/linux/ut
  arch=('x86_64')
  makedepends=('systemd' 'python' 'libcap-ng')
  license=('GPL2')
@@ -8,26 +9,35 @@
 +options=('debug')
  validpgpkeys=('B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284')  # Karel Zak
  source=("https://www.kernel.org/pub/linux/utils/util-linux/v$_pkgmajor/$pkgbase-$pkgver.tar."{xz,sign}
-         '0001-fstrim-cleanup-uncludes.patch'
-@@ -46,6 +46,8 @@ build() {
+         pam-{login,common,runuser,su}
+@@ -35,6 +35,8 @@ build() {
    cd "$pkgbase-$pkgver"
  
-   ./configure --prefix=/usr \
-+              --host=@CHOST@ --build=@BUILDHOST@ \
-+              --without-systemd \
-               --libdir=/usr/lib \
-               --bindir=/usr/bin \
-               --localstatedir=/run \
-@@ -56,7 +58,7 @@ build() {
-               --enable-chfn-chsh \
-               --enable-write \
-               --enable-mesg \
--              --with-python=3
-+              --without-python
+   ./configure \
++    --host=@CHOST@ --build=@BUILDHOST@ \
++    --without-systemd \
+     --prefix=/usr \
+     --libdir=/usr/lib \
+     --bindir=/usr/bin \
+@@ -46,7 +48,7 @@ build() {
+     --enable-chfn-chsh \
+     --enable-write \
+     --enable-mesg \
+-    --with-python=3
++    --without-python
  
    make
  }
-@@ -89,7 +91,6 @@ package_util-linux() {
+@@ -55,7 +57,7 @@ package_util-linux() {
+   conflicts=('rfkill')
+   provides=('rfkill')
+   replaces=('rfkill')
+-  depends=('pam' 'shadow' 'coreutils' 'libsystemd' 'libcap-ng' 'libutil-linux')
++  depends=('pam' 'shadow' 'coreutils' 'libcap-ng' 'libutil-linux')
+   optdepends=('python: python bindings to libmount'
+               'words: default dictionary for look')
+   groups=('base' 'base-devel')
+@@ -84,7 +86,6 @@ package_util-linux() {
    install -m644 "$srcdir/pam-su" "$pkgdir/etc/pam.d/su-l"
  
    # TODO(dreisner): offer this upstream?
@@ -35,7 +45,7 @@
  
    # adjust for usrmove
    # TODO(dreisner): fix configure.ac upstream so that this isn't needed
-@@ -115,6 +116,7 @@ package_util-linux() {
+@@ -110,6 +111,7 @@ package_util-linux() {
  
  package_libutil-linux() {
    pkgdesc="util-linux runtime libraries"
