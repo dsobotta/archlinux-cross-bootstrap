@@ -1,6 +1,6 @@
 diff -rupN a/0001-pthread-reentrant.patch b/0001-pthread-reentrant.patch
---- a/0001-pthread-reentrant.patch	1970-01-01 01:00:00.000000000 +0100
-+++ b/0001-pthread-reentrant.patch	2018-05-25 10:19:14.186356955 +0200
+--- a/0001-pthread-reentrant.patch	1970-01-01 03:00:00.000000000 +0300
++++ b/0001-pthread-reentrant.patch	2019-01-23 12:03:16.016801797 +0300
 @@ -0,0 +1,11 @@
 +--- trunk/gcc/config/riscv/linux.h	2018/01/03 10:03:58	256169
 ++++ trunk/gcc/config/riscv/linux.h	2018/02/13 11:21:01	257621
@@ -14,21 +14,26 @@ diff -rupN a/0001-pthread-reentrant.patch b/0001-pthread-reentrant.patch
 + -melf" XLEN_SPEC "lriscv \
 + %{shared} \
 diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-06-19 08:33:15.147041639 +0200
-+++ b/PKGBUILD	2018-06-19 08:56:49.223722416 +0200
-@@ -5,8 +5,9 @@
+--- a/PKGBUILD	2019-01-23 12:04:29.150677517 +0300
++++ b/PKGBUILD	2019-01-23 12:03:16.016801797 +0300
+@@ -1,36 +1,42 @@
++# $Id$
+ # Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+ # Contributor: Allan McRae <allan@archlinux.org>
+ 
  # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
  # NOTE: libtool requires rebuilt with each new gcc version
  
 -pkgname=(gcc gcc-libs gcc-fortran gcc-objc gcc-ada gcc-go lib32-gcc-libs)
--pkgver=8.1.0
+-pkgver=8.2.1+20181127
 +pkgname=(gcc gcc-libs gcc-fortran)
 +[ "x@MULTILIB@" == "xdisable" ] || pkgname+=(lib32-gcc-libs)
 +pkgver=7.3.1+20180312
  _majorver=${pkgver:0:1}
- _islver=0.18
+-_islver=0.20
++_islver=0.18
  pkgrel=1
-@@ -14,21 +15,26 @@ pkgdesc='The GNU Compiler Collection'
+ pkgdesc='The GNU Compiler Collection'
  arch=(x86_64)
  license=(GPL LGPL FDL custom)
  url='http://gcc.gnu.org'
@@ -36,29 +41,34 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  makedepends=(binutils libmpc gcc-ada doxygen lib32-glibc lib32-gcc-libs python)
  checkdepends=(dejagnu inetutils)
  options=(!emptydirs)
- #source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
--source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
-+source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
+-#source=(https://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz{,.sig}
++#source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
+ source=(https://sources.archlinux.org/other/gcc/gcc-${pkgver/+/-}.tar.xz{,.sig}
          http://isl.gforge.inria.fr/isl-${_islver}.tar.bz2
 -        c89 c99)
 +        c89 c99
 +        gcc-pure64.patch::https://gist.githubusercontent.com/alexforsale/a1339a64882ac7df065404f0af9bb639/raw/9586520039c5b83b96aadfff9aa206bd1bb6972d/gcc-pure64.patch
 +        0001-pthread-reentrant.patch)
  validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
+-              86CFFCA918CF3AF47147588051E8B148A9999C34  # evangelos@foutrelis.com
                13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
                33C235A34C46AA3FFB293709A328C3A2C3C45C06) # Jakub Jelinek <jakub@redhat.com>
--sha256sums=('1d1866f992626e61349a1ccd0b8d5253816222cdc13390dcfaa74b093aa2b153'
+-sha256sums=('6f64ffda2839e96a8551b767bf4f92be4e7a09377ea40058355b4eeb13bc3800'
 +sha256sums=('c52618f656f2102b3544419e7d0a8a4f4e6ff052783865202be73edf1a40e28b'
              'SKIP'
-             '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
+-            'b587e083eb65a8b394e833dea1744f21af3f0e413a448c17536b5549ae42a4c2'
++            '6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b'
              'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
 -            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a')
 +            '2513c6d9984dd0a2058557bf00f06d8d5181734e41dcfe07be7ed86f2959622a'
 +            'c7545a5faca9fc1aee47bd1a4e407e7a64ef1d4c4fb018ede0a5f5ffa16c33be'
 +            'fc9c6f0edd615f2b39deff28b9626a08fd98ef8ce19f7e34281c0a5bd653ac3b')
  
- _svnrev=259195
+-_svnrev=264010
++_svnrev=259195
  _svnurl=svn://gcc.gnu.org/svn/gcc/branches/gcc-${_majorver}-branch
+ _libdir=usr/lib/gcc/$CHOST/${pkgver%%+*}
+ 
 @@ -63,11 +69,14 @@ prepare() {
    sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
  
@@ -104,7 +114,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
        --with-system-zlib \
        --with-isl \
        --enable-__cxa_atexit \
-@@ -103,16 +116,13 @@ build() {
+@@ -103,17 +116,13 @@ build() {
        --enable-install-libiberty \
        --with-linker-hash-style=gnu \
        --enable-gnu-indirect-function \
@@ -113,7 +123,9 @@ diff -rupN a/PKGBUILD b/PKGBUILD
        --disable-werror \
        --enable-checking=release \
        --enable-default-pie \
-       --enable-default-ssp
+-      --enable-default-ssp \
+-      --enable-cet=auto
++      --enable-default-ssp
  
    make
 -
@@ -122,16 +134,20 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  }
  
  check() {
-@@ -126,7 +136,7 @@ check() {
+@@ -127,10 +136,9 @@ check() {
  package_gcc-libs() {
    pkgdesc='Runtime libraries shipped by GCC'
    groups=(base)
 -  depends=('glibc>=2.27')
 +  depends=('glibc>=2.27' libmpc)
    options+=(!strip)
-   provides=($pkgname-multilib libgo.so libgfortran.so libubsan.so libasan.so)
+-  provides=($pkgname-multilib libgo.so libgfortran.so libubsan.so libasan.so
+-            libtsan.so liblsan.so)
++  provides=($pkgname-multilib libgo.so libgfortran.so libubsan.so libasan.so)
    replaces=($pkgname-multilib)
-@@ -137,23 +147,16 @@ package_gcc-libs() {
+ 
+   cd gcc-build
+@@ -139,23 +147,16 @@ package_gcc-libs() {
  
    for lib in libatomic \
               libgfortran \
@@ -156,7 +172,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
               libquadmath; do
      make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
    done
-@@ -184,22 +187,20 @@ package_gcc() {
+@@ -186,22 +187,20 @@ package_gcc() {
    install -m755 -t "$pkgdir/${_libdir}/" gcc/{cc1,cc1plus,collect2,lto1}
  
    make -C $CHOST/libgcc DESTDIR="$pkgdir" install
@@ -184,7 +200,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  
    make DESTDIR="$pkgdir" install-fixincludes
    make -C gcc DESTDIR="$pkgdir" install-mkheaders
-@@ -210,23 +211,15 @@ package_gcc() {
+@@ -212,25 +211,15 @@ package_gcc() {
      "$pkgdir/usr/lib/bfd-plugins/"
  
    make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_{libsubinclude,toolexeclib}HEADERS
@@ -192,6 +208,8 @@ diff -rupN a/PKGBUILD b/PKGBUILD
    make -C $CHOST/libquadmath DESTDIR="$pkgdir" install-nodist_libsubincludeHEADERS
 -  make -C $CHOST/libsanitizer DESTDIR="$pkgdir" install-nodist_{saninclude,toolexeclib}HEADERS
 -  make -C $CHOST/libsanitizer/asan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+-  make -C $CHOST/libsanitizer/tsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
+-  make -C $CHOST/libsanitizer/lsan DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 -  make -C $CHOST/libmpx DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 -  make -C $CHOST/32/libgomp DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
 -  make -C $CHOST/32/libitm DESTDIR="$pkgdir" install-nodist_toolexeclibHEADERS
@@ -211,7 +229,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  
    make -C libcpp DESTDIR="$pkgdir" install
    make -C gcc DESTDIR="$pkgdir" install-po
-@@ -238,9 +231,6 @@ package_gcc() {
+@@ -242,9 +231,6 @@ package_gcc() {
    install -Dm755 "$srcdir/c89" "$pkgdir/usr/bin/c89"
    install -Dm755 "$srcdir/c99" "$pkgdir/usr/bin/c99"
  
@@ -221,7 +239,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
    # remove files provided by lib32-gcc-libs
    rm -f "$pkgdir"/usr/lib32/lib{stdc++,gcc_s}.so
  
-@@ -263,7 +253,7 @@ package_gcc-fortran() {
+@@ -267,7 +253,7 @@ package_gcc-fortran() {
    cd gcc-build
    make -C $CHOST/libgfortran DESTDIR="$pkgdir" install-cafexeclibLTLIBRARIES \
      install-{toolexeclibDATA,nodist_fincludeHEADERS}
@@ -230,7 +248,16 @@ diff -rupN a/PKGBUILD b/PKGBUILD
      install-{toolexeclibDATA,nodist_fincludeHEADERS}
    make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_fincludeHEADERS
    make -C gcc DESTDIR="$pkgdir" fortran.install-{common,man,info}
-@@ -365,20 +355,12 @@ package_lib32-gcc-libs() {
+@@ -336,7 +322,7 @@ package_gcc-ada() {
+ package_gcc-go() {
+   pkgdesc='Go front-end for GCC'
+   depends=("gcc=$pkgver-$pkgrel")
+-  provides=("go=1.10.1" $pkgname-multilib)
++  provides=("go=1.8.1" $pkgname-multilib)
+   replaces=($pkgname-multilib)
+   conflicts=(go)
+ 
+@@ -369,20 +355,12 @@ package_lib32-gcc-libs() {
  
    for lib in libatomic \
               libgfortran \
