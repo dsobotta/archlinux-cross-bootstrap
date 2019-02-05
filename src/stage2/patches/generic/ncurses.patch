@@ -1,6 +1,6 @@
 --- a/PKGBUILD	2018-02-19 09:58:10.624117850 +0100
 +++ b/PKGBUILD	2018-02-19 11:04:15.515591931 +0100
-@@ -21,10 +21,12 @@ validpgpkeys=('C52048C0C0748FEE227D47A27
+@@ -20,11 +20,12 @@
  build() {
    cd $pkgname-$pkgver
  
@@ -9,9 +9,9 @@
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --mandir=/usr/share/man \
      --with-pkg-config-libdir=/usr/lib/pkgconfig \
      --with-shared --with-normal --without-debug --without-ada \
--    --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared
-+    --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared \
-+    --disable-stripping
+     --enable-widec --enable-pc-files --with-cxx-binding --with-cxx-shared \
+-    --with-manpage-format=normal
++    --with-manpage-format=normal --disable-stripping
    make
  }
  
