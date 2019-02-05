@@ -1,13 +1,13 @@
 diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-05-19 22:56:10.097500131 +0200
-+++ b/PKGBUILD	2018-05-19 22:58:48.824168384 +0200
+--- a/PKGBUILD	2019-01-29 00:20:29.540095192 +0300
++++ b/PKGBUILD	2019-01-29 00:54:25.020384383 +0300
 @@ -2,14 +2,14 @@
  # Maintainer: Jan de Groot <jgc@archlinux.org>
  
  pkgbase=glib2
 -pkgname=(glib2 glib2-docs)
 +pkgname=(glib2)
- pkgver=2.56.1
+ pkgver=2.58.2
  pkgrel=1
  pkgdesc="Low level core library"
  url="https://wiki.gnome.org/Projects/GLib"
@@ -15,34 +15,46 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  arch=(x86_64)
 -depends=(pcre libffi libutil-linux zlib)
 +depends=(pcre libffi libutil-linux zlib libelf)
- makedepends=(gettext gtk-doc shared-mime-info python libelf git util-linux dbus)
+ makedepends=(gettext gtk-doc shared-mime-info python libelf git util-linux meson dbus)
  checkdepends=(desktop-file-utils)
  optdepends=('python: gdbus-codegen, glib-genmarshal, glib-mkenums, gtester-report'
-@@ -43,13 +43,18 @@ build() {
-   check_option debug y && debug=yes
- 
-   cd glib
-+  cat > config.cache << EOF
-+glib_cv_stack_grows=no
-+glib_cv_uscore=no
-+EOF
-   ./configure \
-+    --host=@CHOST@ --build=@BUILDHOST@ \
-+    --cache-file=config.cache \
-     --prefix=/usr \
-     --libdir=/usr/lib \
-     --sysconfdir=/etc \
-     --with-pcre=system \
-     --enable-debug=$debug \
--    --enable-gtk-doc \
-     --disable-fam
-   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
-   make
-@@ -63,7 +68,6 @@ check() {
- package_glib2() {
-   cd glib
-   make DESTDIR="$pkgdir" install
--  mv "$pkgdir/usr/share/gtk-doc" "$srcdir"
- 
-   install -Dt "$pkgdir/usr/share/libalpm/hooks" -m644 ../*.hook
+@@ -37,10 +37,28 @@ prepare() {
  }
+ 
+ build() {
++  cat > cross-file << EOF
++[binaries]
++c = '@CHOST@-gcc'
++cpp = '@CHOST@-g++'
++ar = '@CHOST@-ar'
++strip = '@CHOST@-strip'
++pkgconfig = 'pkg-config'
++[host_machine]
++system = 'linux'
++cpu_family = '@CARCH@'
++cpu = '@GCC_MARCH@'
++endian = 'little'
++EOF
++
++  export PKG_CONFIG_LIBDIR="@SYSROOT@/usr/lib/pkgconfig"
++  export PKG_CONFIG_SYSROOT_DIR="@SYSROOT@"
+   arch-meson glib build \
++    --cross-file cross-file \
++    -D libmount=false \
+     -D selinux=false \
+     -D man=true \
+-    -D gtk_doc=true
++    -D gtk_doc=false
+   ninja -C build
+ }
+ 
+@@ -54,9 +72,6 @@ package_glib2() {
+ 
+   python -m compileall -d /usr/share/glib-2.0/codegen "$pkgdir/usr/share/glib-2.0/codegen"
+   python -O -m compileall -d /usr/share/glib-2.0/codegen "$pkgdir/usr/share/glib-2.0/codegen"
+-
+-  # Split docs
+-  mv "$pkgdir/usr/share/gtk-doc" "$srcdir"
+ }
+ 
+ package_glib2-docs() {
