@@ -1,0 +1,35 @@
+# Maintainer:  Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Contributor: Allan McRae <allan@archlinux.org>
+
+# toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
+
+_target_arch=@LINUX_ARCH@
+_target=@CHOST@
+pkgname=$_target-linux-api-headers
+pkgver=4.16
+pkgrel=1
+pkgdesc="Kernel headers sanitized for use in userspace ($_target)"
+arch=(any)
+url='http://www.gnu.org/software/libc'
+license=(GPL2)
+source=(https://www.kernel.org/pub/linux/kernel/v4.x/linux-${pkgver}.tar.{xz,sign})
+sha512sums=('ab47849314b177d0eec9dbf261f33972b0d89fb92fb0650130ffa7abc2f36c0fab2d06317dc1683c51a472a9a631573a9b1e7258d6281a2ee189897827f14662'
+            'SKIP')
+validpgpkeys=('ABAF11C65A2970B130ABE3C479BE3E4300411886'   # Linus Torvalds
+              '647F28654894E3BD457199BE38DBBDC86092693E')  # Greg Kroah-Hartman
+
+build() {
+  cd linux-$pkgver
+
+  make ARCH=$_target_arch mrproper
+  make ARCH=$_target_arch headers_check
+}
+
+package() {
+  cd linux-$pkgver
+
+  make INSTALL_HDR_PATH="$pkgdir/usr/$_target/" ARCH=$_target_arch V=0 headers_install
+
+  # clean-up unnecessary files generated during install
+  find "$pkgdir" \( -name .install -or -name ..install.cmd \) -delete
+}

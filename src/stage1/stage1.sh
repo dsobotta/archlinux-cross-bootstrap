@@ -91,7 +91,7 @@ MAKEFLAGS="-j$(($(nproc) + 1))"
 EOF
 
   # build and install the toolchain packages
-  for pkg in binutils linux-libre-api-headers gcc-bootstrap glibc gcc; do
+  for pkg in binutils linux-api-headers gcc-bootstrap glibc gcc; do
     msg "makepkg: $CHOST-$pkg"
 
     if ! check_pkgfile "$PKGDEST" "$CHOST-$pkg"; then
