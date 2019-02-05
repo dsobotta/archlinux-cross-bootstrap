@@ -1,25 +1,13 @@
---- a/PKGBUILD	2018-02-20 18:48:24.326408636 +0100
-+++ b/PKGBUILD	2018-02-20 18:54:14.080912013 +0100
-@@ -14,8 +14,8 @@ license=('custom:BSD')
- depends=('perl')
- optdepends=('ca-certificates')
- backup=('etc/ssl/openssl.cnf')
--source=("https://www.openssl.org/source/${pkgname}-${_ver}.tar.gz"
--        "https://www.openssl.org/source/${pkgname}-${_ver}.tar.gz.asc"
-+source=("https://www.openssl.org/source/old/1.1.0/${pkgname}-${_ver}.tar.gz"
-+        "https://www.openssl.org/source/old/1.1.0/${pkgname}-${_ver}.tar.gz.asc"
-         'ca-dir.patch')
- sha256sums=('de4d501267da39310905cb6dc8c6121f7a2cad45a7707f76df828fe1b85073af'
-             'SKIP'
-@@ -39,9 +39,11 @@ build() {
- 		openssltarget='linux-elf'
- 		optflags=''
- 	fi
-+	openssltarget='linux-elf'
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-23 17:55:51.062539349 +0300
++++ b/PKGBUILD	2019-01-23 18:02:21.757731758 +0300
+@@ -31,7 +31,8 @@ build() {
  
  	# mark stack as non-executable: http://bugs.archlinux.org/task/12434
  	./Configure --prefix=/usr --openssldir=/etc/ssl --libdir=lib \
+-		shared no-ssl3-method enable-ec_nistp_64_gcc_128 linux-x86_64 \
 +		--cross-compile-prefix=@CHOST@- no-asm \
- 		shared no-ssl3-method ${optflags} \
- 		"${openssltarget}" \
++		shared no-ssl3-method enable-ec_nistp_64_gcc_128 linux-elf \
  		"-Wa,--noexecstack ${CPPFLAGS} ${CFLAGS} ${LDFLAGS}"
+ 
+ 	make depend
