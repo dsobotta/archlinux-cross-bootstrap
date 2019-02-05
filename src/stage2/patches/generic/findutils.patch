@@ -1,6 +1,15 @@
---- a/PKGBUILD	2018-02-18 23:11:55.599173182 +0100
-+++ b/PKGBUILD	2018-02-18 23:12:14.096608807 +0100
-@@ -20,7 +20,7 @@ build() {
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-11-08 14:53:25.000000000 +0300
++++ b/PKGBUILD	2019-02-05 14:29:44.946293593 +0300
+@@ -21,6 +21,7 @@ prepare() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
+   patch -p1 -i "$srcdir"/gnulib-fflush.patch
+   patch -p1 -i "$srcdir"/gnulib-makedev.patch
++  autoreconf --install
+ }
+ 
+ build() {
+@@ -30,7 +31,7 @@ build() {
    # which is a secure version of locate.
    sed -i '/^SUBDIRS/s/locate//' Makefile.in
  
