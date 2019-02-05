@@ -1,11 +1,12 @@
---- a/PKGBUILD	2018-02-22 15:12:19.947100864 +0100
-+++ b/PKGBUILD	2018-02-22 15:21:47.110144429 +0100
-@@ -47,6 +47,8 @@ build() {
-   cd $pkgname-$pkgver
- 
-   ./configure --prefix=/usr \
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-11-28 14:09:45.000000000 +0300
++++ b/PKGBUILD	2019-02-05 18:07:52.687386428 +0300
+@@ -44,6 +44,8 @@ prepare() {
+ build() {
+   cd build
+   ../$pkgbase-$pkgver/configure \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
 +    --with-pkgconfigdir=@SYSROOT@/usr/lib/pkgconfig \
+     --prefix=/usr \
      --sysconfdir=/etc \
      --sbindir=/usr/bin \
-     --libexecdir=/usr/lib/iptables \
