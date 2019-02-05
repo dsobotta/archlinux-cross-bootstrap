@@ -1,6 +1,13 @@
---- a/PKGBUILD	2018-02-20 13:17:21.841549506 +0100
-+++ b/PKGBUILD	2018-02-20 13:18:12.577595435 +0100
-@@ -36,7 +36,7 @@ prepare() {
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-09-11 23:43:33.000000000 +0300
++++ b/PKGBUILD	2019-02-05 15:55:39.903928119 +0300
+@@ -30,12 +30,13 @@ pkgver() {
+ 
+ prepare() {
+   cd libtool
++  sed -i 's/depth 365/depth 1024/' ./bootstrap
+   ./bootstrap
+ }
  
  build() {
    cd libtool
