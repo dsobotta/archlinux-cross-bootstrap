@@ -1,11 +1,11 @@
---- a/PKGBUILD	2018-02-16 08:16:53.522238284 +0100
-+++ b/PKGBUILD	2018-02-16 11:06:10.196130006 +0100
-@@ -37,11 +37,11 @@ prepare() {
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-24 15:46:12.000000000 +0300
++++ b/PKGBUILD	2019-02-05 16:26:27.029434148 +0300
+@@ -33,10 +33,11 @@ prepare() {
  build() {
-   cd $pkgname
- 
--  ./configure --prefix=/usr \
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr \
+   cd p11-kit
+   ./configure --prefix=/usr \
++    --host=@CHOST@ --build=@BUILDHOST@ \
      --sysconfdir=/etc \
      --localstatedir=/var \
      --libexecdir=/usr/lib \
