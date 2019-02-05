@@ -1,11 +1,21 @@
---- a/PKGBUILD	2018-02-22 08:47:40.952261927 +0100
-+++ b/PKGBUILD	2018-02-22 08:47:59.137271654 +0100
-@@ -17,7 +17,7 @@ sha256sums=('47f96c37b4f2aac289f0bc1bacf
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-25 03:08:06.000000000 +0300
++++ b/PKGBUILD	2019-02-05 16:37:43.196706634 +0300
+@@ -9,14 +9,15 @@ url='https://www.gnupg.org/related_softw
+ arch=('x86_64')
+ license=('GPL')
+ depends=('libgpg-error')
+-validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6') # Werner Koch
++validpgpkeys=('D8692123C4065DEA5E0F3AB5249B39D24F25E3B6'  # Werner Koch
++              '031EC2536E580D8EA286A9F22071B08A33BD3F06') # NIIBE Yutaka
+ source=("https://gnupg.org/ftp/gcrypt/${pkgname}/${pkgname}-${pkgver}.tar.bz2"{,.sig})
+ sha256sums=('986b1bf277e375f7a960450fbb8ffbd45294d06598916ad4ebf79aee0cb788e7'
+             'SKIP')
  
  build() {
  	cd "${srcdir}/${pkgname}-${pkgver}"
 -	./configure --prefix=/usr
-+	./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
++	./configure --prefix=/usr --host=@CHOST@ --build=@BUILDHOST@
  	make
  }
  
