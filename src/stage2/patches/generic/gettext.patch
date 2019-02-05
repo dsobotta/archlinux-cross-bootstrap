@@ -1,11 +1,26 @@
---- a/PKGBUILD	2018-02-21 22:25:46.093110223 +0100
-+++ b/PKGBUILD	2018-02-21 22:26:15.874439771 +0100
-@@ -17,7 +17,7 @@ validpgpkeys=('462225C3B46F34879FC8496CD
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-24 00:32:27.172846412 +0300
++++ b/PKGBUILD	2019-01-24 00:34:50.527143344 +0300
+@@ -8,7 +8,7 @@ url="https://www.gnu.org/software/gettex
+ arch=(x86_64)
+ license=(GPL)
+ groups=(base base-devel)
+-depends=(gcc-libs acl sh glib2 libunistring libcroco)
++depends=(gcc-libs acl sh glib2 libunistring)
+ makedepends=(gettext emacs git)
+ optdepends=('git: for autopoint infrastructure updates')
+ options=(!docs)
+@@ -26,11 +26,12 @@ prepare() {
  
  build() {
-   cd "${srcdir}/${pkgname}-${pkgver}"
--  ./configure --prefix=/usr
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
-   make
- }
+   cd $pkgname-$pkgver
+-  ./configure \
++  ./configure --host=@CHOST@ --build=@BUILDHOST@ \
+     --prefix=/usr \
+     --enable-csharp \
+     --enable-nls \
+     --with-xz \
++    --with-included-libcroco \
+     --without-included-gettext
  
+   sed -e 's/ -shared / -Wl,-O1,--as-needed\0/g' \
