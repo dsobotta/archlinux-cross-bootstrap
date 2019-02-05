@@ -1,11 +1,18 @@
---- a/PKGBUILD	2018-02-20 13:29:54.681082977 +0100
-+++ b/PKGBUILD	2018-02-20 14:13:03.673184096 +0100
-@@ -17,7 +17,7 @@ md5sums=('2882e3179748cc9f9c23ec593d6adc
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2018-11-08 15:04:36.000000000 +0300
++++ b/PKGBUILD	2019-02-05 16:12:53.714093485 +0300
+@@ -20,12 +20,13 @@ md5sums=('2882e3179748cc9f9c23ec593d6adc
+ prepare() {
+   cd "$pkgname-$pkgver"
+   patch -p1 -i "$srcdir"/flex-pie.patch
++  sed -i '/doc \\/d' Makefile.am
+   autoreconf
+ }
  
  build() {
    cd "$pkgname-$pkgver"
 -  ./configure --prefix=/usr
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --disable-bootstrap --prefix=/usr
++  ./configure --prefix=/usr --host=@CHOST@ --build=@BUILDHOST@ --disable-bootstrap
    make
  }
  
