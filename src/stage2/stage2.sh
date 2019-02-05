@@ -78,7 +78,7 @@ stage2_package_build() {
   local pkgarch
   pkgarch=$(pkgarch "$1") || return
 
-  if [ "x$pkgarch" == "xany" ] || [ "x$1" == "xca-certificates-mozilla" ]; then
+  if [ "x$pkgarch" == "xany" -a "x$1" != "xlinux-api-headers" ] || [ "x$1" == "xca-certificates-mozilla" ]; then
     package_reuse_upstream "$1" || return
   else
     stage2_makepkg "$1" || return

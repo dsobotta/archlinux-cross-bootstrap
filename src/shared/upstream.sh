@@ -37,7 +37,7 @@ package_fetch_upstream_pkgfiles() {
   [ -z "$pkgbase" ] && pkgbase="$1"
 
   mkdir -p .arch
-  asp export "$repo/$1" >/dev/null
+  asp export "$repo/$1" >/dev/null || asp export "$1" >/dev/null
   mv "$pkgbase"/* .arch/
   rm -rf "$pkgbase"
 
