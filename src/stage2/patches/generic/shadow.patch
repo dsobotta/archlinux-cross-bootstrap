@@ -1,15 +1,16 @@
---- a/PKGBUILD	2018-02-21 18:43:16.017328844 +0100
-+++ b/PKGBUILD	2018-02-21 18:54:13.612174923 +0100
-@@ -55,6 +55,8 @@ pkgver() {
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-23 18:16:06.761523611 +0300
++++ b/PKGBUILD	2019-01-23 18:17:00.599374851 +0300
+@@ -50,6 +50,8 @@ pkgver() {
  prepare() {
    cd "$pkgname"
  
 +  sed -i "/SUBDIRS/s/man//g" Makefile.am
 +
-   # need to offer these upstream
-   patch -Np1 <"$srcdir/xstrdup.patch"
-   patch -Np1 <"$srcdir/shadow-strncpy-usage.patch"
-@@ -70,12 +72,13 @@ build() {
+   local backports=(
+     # Fix usermod crash
+     73a876a05612c278da747faeaeea40c3b8d34a53
+@@ -74,12 +76,13 @@ build() {
  
    ./configure \
      LIBS="-lcrypt" \
@@ -24,7 +25,7 @@
      --sysconfdir=/etc \
      --with-libpam \
      --with-group-name-max-length=32 \
-@@ -129,20 +132,6 @@ package() {
+@@ -133,20 +136,6 @@ package() {
    mv "$pkgdir"/usr/bin/{newgrp,sg}
  
    # ...and their many man pages
