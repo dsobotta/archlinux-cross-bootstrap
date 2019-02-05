@@ -1,0 +1,12 @@
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-26 21:01:47.000000000 +0300
++++ b/PKGBUILD	2019-02-05 17:52:59.685199816 +0300
+@@ -16,6 +16,8 @@ sha256sums=('90d902a1282cc4e197a8023b6d6
+ 
+ build() {
+   cd $pkgname-$pkgver
++  export CC=@CHOST@-gcc
++  export CXX=@CHOST@-g++
+   make
+   make zstdmt
+   make -C contrib/pzstd
