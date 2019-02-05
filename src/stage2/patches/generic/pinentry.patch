@@ -1,5 +1,6 @@
---- a/PKGBUILD	2018-02-24 21:11:19.960151917 +0100
-+++ b/PKGBUILD	2018-02-26 18:22:05.483328241 +0100
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-23 23:45:23.499402739 +0300
++++ b/PKGBUILD	2019-01-23 23:50:26.750586391 +0300
 @@ -9,7 +9,7 @@ pkgdesc='Collection of simple PIN or pas
  url='http://gnupg.org/related_software/pinentry/'
  arch=('x86_64')
@@ -9,7 +10,7 @@
  makedepends=('gtk2' 'qt5-base' 'gcr')
  optdepends=('gtk2: gtk2 backend'
              'qt5-base: qt backend'
-@@ -22,15 +22,16 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB52
+@@ -26,15 +26,17 @@ backup=('usr/bin/pinentry')
  build() {
  	cd "${srcdir}/${pkgname}-${pkgver}"
  	./configure \
@@ -28,6 +29,7 @@
 +		--disable-pinentry-gnome3 \
 +		--disable-pinentry-qt \
 +		--disable-libsecret \
++		--disable-pinentry-fltk \
  
  	make
  }
