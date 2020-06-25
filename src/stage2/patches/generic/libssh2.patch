@@ -1,22 +1,23 @@
-commit 3a556ca7ddf6f9e8c41a39cf19498cd95a80b202
+commit f8ba1efae09795e362f77af1f4040e969aa6218a
 Author: WANG Xuerui <git@xen0n.name>
 Date:   Thu Jun 25 22:36:33 2020 +0800
 
     [stage2] libssh2: fix build
 
 diff --git a/PKGBUILD b/PKGBUILD
-index f500187..bb8453b 100644
+index f500187..5210ecb 100644
 --- a/PKGBUILD
 +++ b/PKGBUILD
-@@ -22,7 +22,10 @@ md5sums=('1beefafe8963982adc84b408b2959927'
+@@ -22,7 +22,11 @@ md5sums=('1beefafe8963982adc84b408b2959927'
  build() {
    cd "$pkgname-$pkgver"
  
 -  ./configure --prefix=/usr
 +  export ac_cv_path_SSHD=""
-+  export LDFLAGS="-L@SYSROOT@/lib -L@SYSROOT@/usr/lib $LDFLAGS"
++  #export LDFLAGS="-L@SYSROOT@/lib -L@SYSROOT@/usr/lib $LDFLAGS"
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr \
-+    --with-libssl-prefix=@SYSROOT@/usr
++    --with-libssl-prefix=@SYSROOT@/usr \
++    --with-libz-prefix=@SYSROOT@/usr
    make
  }
  
