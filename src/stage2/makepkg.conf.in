@@ -25,5 +25,6 @@ COMPRESSXZ=(xz -c -z -)
 COMPRESSLRZ=(lrzip -q)
 COMPRESSLZO=(lzop -q)
 COMPRESSZ=(compress -c -f)
-PKGEXT='.pkg.tar.xz'
+COMPRESSZST=(zstd -c -z -q -)
+PKGEXT='.pkg.tar.zst'
 SRCEXT='.src.tar.gz'

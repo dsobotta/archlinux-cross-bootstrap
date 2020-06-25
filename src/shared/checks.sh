@@ -114,7 +114,7 @@ check_pkgfile() {
 
   local esc pkgfile have_pkgfile=yes
   esc=$(printf '%s\n' "$2" | sed 's:[][\/.+^$*]:\\&:g')
-  pkgfile=$(find "$1" -regex "^.*/$esc$p-[^-]*-[^-]*-[^-]*\\.pkg\\.tar\\.xz\$")
+  pkgfile=$(find "$1" -regex "^.*/$esc$p-[^-]*-[^-]*-[^-]*\\.pkg\\.tar\\.xz\$" -o -regex "^.*/$esc$p-[^-]*-[^-]*-[^-]*\\.pkg\\.tar\\.zst\$")
   [ -n "$pkgfile" ] || have_pkgfile=no
   echo $have_pkgfile
 

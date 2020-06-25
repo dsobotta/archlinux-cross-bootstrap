@@ -35,7 +35,7 @@ build_stage2_makepkg() {
 
   # fetch pacman package to excract makepkg
   pacman -Sw --noconfirm --cachedir . pacman || return
-  mkdir tmp && bsdtar -C tmp -xf pacman-*.pkg.tar.xz
+  mkdir tmp && bsdtar -C tmp -xf pacman-*.pkg.tar.zst
 
   # install makepkg
   cp -Lv tmp/usr/bin/makepkg "$BUILDDIR"/makepkg.sh

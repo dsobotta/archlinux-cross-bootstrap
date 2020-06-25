@@ -63,7 +63,7 @@ stage3_makepkg() {
     # a bit of magic for -decross builds
     PKGDEST=. "$BUILDDIR/libremakepkg.sh" -n "$CHOST"-stage3 || return
     local pkgfiles pkgfile
-    pkgfiles=("$pkgname"-*.pkg.tar.xz); pkgfile="${pkgfiles[0]}"
+    pkgfiles=("$pkgname"-*.pkg.tar.zst); pkgfile="${pkgfiles[0]}"
     mv -v "$pkgfile" "$PKGDEST/${pkgfile/$pkgname/$1}"
   else
     # regular build otherwise
@@ -87,7 +87,7 @@ stage3_package_build() {
   # update repo
   rm -rf /var/cache/pacman/pkg-"$CARCH"/*
   rm -rf "$PKGDEST"/native.{db,files}*
-  repo-add -q -R "$PKGDEST"/{native.db.tar.gz,*.pkg.tar.xz}
+  repo-add -q -R "$PKGDEST"/{native.db.tar.gz,*.pkg.tar.xz,*.pkg.tar.zst}
 }
 
 stage3_package_install() {

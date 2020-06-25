@@ -90,12 +90,12 @@ stage2_package_build() {
   # update repo
   rm -rf "$CHROOTDIR"/var/cache/pacman/pkg/*
   rm -rf "$PKGDEST"/cross.{db,files}*
-  repo-add -q -R "$PKGDEST"/{cross.db.tar.gz,*.pkg.tar.xz}
+  repo-add -q -R "$PKGDEST"/{cross.db.tar.gz,*.pkg.tar.zst}
 }
 
 stage2_package_install() {
   # install in chroot
-  yes | pacman --noscriptlet --force --config "$CHROOTDIR"/etc/pacman.conf \
+  yes | pacman --noscriptlet --config "$CHROOTDIR"/etc/pacman.conf \
     -r "$CHROOTDIR" -Syydd "$1" || return
 }
 

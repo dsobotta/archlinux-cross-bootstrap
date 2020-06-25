@@ -85,7 +85,7 @@ package_reuse_upstream() {
       pacman -Sddw --noconfirm --cachedir . "$1" || return
       local pkgdir="$MAKEPKGDIR/$1/pkg/$1"
       local pkgfiles pkgfile
-      pkgfiles=( "$1"-*.pkg.tar.xz ); pkgfile="${pkgfiles[0]}"
+      pkgfiles=( "$1"-*.pkg.tar.zst ); pkgfile="${pkgfiles[0]}"
       mkdir -p "$pkgdir"
       bsdtar -C "$pkgdir" -xf "$pkgfile" || return
       rm "$pkgdir"/.{MTREE,BUILDINFO}
@@ -96,8 +96,8 @@ package_reuse_upstream() {
           --options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' \
         .PKGINFO *
       # shellcheck disable=SC2035
-      env LANG=C bsdtar -vcf - .MTREE .PKGINFO * | xz -c -z - > \
-        "$PKGDEST/${pkgfile%-*}-$CARCH.pkg.tar.xz" || return
+      env LANG=C bsdtar -vcf - .MTREE .PKGINFO * | zstd - -o \
+        "$PKGDEST/${pkgfile%-*}-$CARCH.pkg.tar.zst" || return
       popd >/dev/null || return
       ;;
   esac
