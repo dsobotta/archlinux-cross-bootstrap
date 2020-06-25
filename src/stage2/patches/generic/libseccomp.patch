@@ -1,9 +1,17 @@
---- a/PKGBUILD	2018-03-03 22:00:46.580103696 +0100
-+++ b/PKGBUILD	2018-03-03 22:00:46.579103680 +0100
-@@ -2,7 +2,7 @@
- 
+commit bd195533d2fc48a2459da91c6c4de6c582661668
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 01:17:46 2020 +0800
+
+    [stage2] libseccomp: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 9d95285..81c8124 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -39,7 +39,7 @@ prepare() {
  build() {
-   cd $pkgname-$pkgver
+   cd ${pkgname}
+   autoreconf -fiv
 -  ./configure --prefix=/usr
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
    make
