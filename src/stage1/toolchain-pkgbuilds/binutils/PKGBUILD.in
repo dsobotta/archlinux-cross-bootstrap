@@ -42,4 +42,13 @@ package() {
 
   # Remove info documents that conflict with host version
   rm -r "$pkgdir"/usr/share/info
+
+  # Move everything to /usr
+  mkdir -p "$pkgdir"/usr/@CHOST@/usr
+  mv "$pkgdir"/usr/@CHOST@/bin "$pkgdir"/usr/@CHOST@/usr/bin
+  mv "$pkgdir"/usr/@CHOST@/lib "$pkgdir"/usr/@CHOST@/usr/lib
+
+  # And make symlinks to accommodate for (broken?) ldscripts
+  ln -s usr/bin "$pkgdir"/usr/@CHOST@/bin
+  ln -s usr/lib "$pkgdir"/usr/@CHOST@/lib
 }
