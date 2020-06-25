@@ -48,11 +48,11 @@ chown "$SUDO_USER" "$TOPBUILDDIR"
 . "$TOPSRCDIR"/stage1/stage1.sh
 stage1 || die -e "$ERROR_BUILDFAIL" "Stage 1 failed. Exiting..."
 
-exit 0
-
 # shellcheck source=src/stage2/stage2.sh
 . "$TOPSRCDIR"/stage2/stage2.sh
 stage2 || die -e "$ERROR_BUILDFAIL" "Stage 2 failed. Exiting..."
+
+exit 0
 
 # shellcheck source=src/stage3/stage3.sh
 . "$TOPSRCDIR"/stage3/stage3.sh
