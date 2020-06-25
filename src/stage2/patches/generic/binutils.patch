@@ -4,7 +4,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 @@ -51,6 +51,7 @@ build() {
    cd binutils-build
  
-   "$srcdir/binutils-$pkgver/configure" \
+   "$srcdir/binutils-gdb/configure" \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
      --prefix=/usr \
      --with-lib-path=/usr/lib:/usr/local/lib \
