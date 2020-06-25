@@ -1,62 +1,26 @@
-commit 7fa2c5a76b4aa6a41b8ec6a8fbfbc73468d86951
+commit 263a260c9bb7af53afc7abcebb00fac8273c1c6b
 Author: WANG Xuerui <git@xen0n.name>
-Date:   Thu Jun 25 21:28:15 2020 +0800
+Date:   Thu Jun 25 21:33:31 2020 +0800
 
-    [stage2] gdbm: fix build on gcc-10
+    [stage2] gdbm: turn off -fno-common to fix build on gcc-10
 
 diff --git a/PKGBUILD b/PKGBUILD
-index 6366b50..13eda57 100644
+index 6366b50..eab7c20 100644
 --- a/PKGBUILD
 +++ b/PKGBUILD
-@@ -11,14 +11,24 @@ url='https://www.gnu.org/software/gdbm/gdbm.html'
- license=(GPL3)
- arch=(x86_64)
- depends=(glibc sh)
--source=(https://ftp.gnu.org/gnu/gdbm/${pkgname}-${pkgver}.tar.gz{,.sig})
-+source=(https://ftp.gnu.org/gnu/gdbm/${pkgname}-${pkgver}.tar.gz{,.sig}
-+        gcc10-no-common.patch
-+        )
- validpgpkeys=('325F650C4C2B6AD58807327A3602B07F55D0C732')
- md5sums=('988dc82182121c7570e0cb8b4fcd5415'
--         'SKIP')
-+         'SKIP'
-+         '12ea28a89c48e643e2b1ae91f5f50607'
-+         )
-+
-+prepare() {
-+  cd $pkgname-$pkgver
-+
-+  patch -Np1 < "$srcdir"/gcc10-no-common.patch
-+}
+@@ -18,12 +18,14 @@ md5sums=('988dc82182121c7570e0cb8b4fcd5415'
  
  build() {
    cd $pkgname-$pkgver
 -  ./configure --prefix=/usr --enable-libgdbm-compat
++  export CFLAGS="$CFLAGS -fcommon"
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --enable-libgdbm-compat
    make
  }
  
-diff --git a/gcc10-no-common.patch b/gcc10-no-common.patch
-new file mode 100644
-index 0000000..2fa11c2
---- /dev/null
-+++ b/gcc10-no-common.patch
-@@ -0,0 +1,18 @@
-+--- a/src/parseopt.c	2018-05-30 17:39:15.000000000 +0800
-++++ b/src/parseopt.c	2020-06-25 21:23:46.116666426 +0800
-+@@ -254,11 +254,11 @@
-+     }
-+ }
-+ 
-+-char *parseopt_program_name;
-+-char *parseopt_program_doc;
-+-char *parseopt_program_args;
-++extern char *parseopt_program_name;
-++extern char *parseopt_program_doc;
-++extern char *parseopt_program_args;
-+ const char *program_bug_address = "<" PACKAGE_BUGREPORT ">";
-+-void (*parseopt_help_hook) (FILE *stream);
-++extern void (*parseopt_help_hook) (FILE *stream);
-+ 
-+ static int argsused;
-+ 
+ check() {
+   cd $pkgname-$pkgver
++  export CFLAGS="$CFLAGS -fcommon"
+   make check
+ }
+ 
