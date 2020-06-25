@@ -15,7 +15,7 @@ options=(!emptydirs !strip)
 provides=(${pkgname%-bootstrap})
 conflicts=(${pkgname%-bootstrap})
 source=(https://sourceware.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.xz{,.sig}
-        http://isl.gforge.inria.fr/isl-$_islver.tar.bz2
+        http://isl.gforge.inria.fr/isl-$_islver.tar.xz
         gcc-pure64.patch::https://gist.githubusercontent.com/alexforsale/a1339a64882ac7df065404f0af9bb639/raw/9586520039c5b83b96aadfff9aa206bd1bb6972d/gcc-pure64.patch
         0001-pthread-reentrant.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
