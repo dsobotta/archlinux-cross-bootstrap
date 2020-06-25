@@ -1,18 +1,26 @@
---- a/PKGBUILD	2018-03-05 07:50:12.797543567 +0100
-+++ b/PKGBUILD	2018-03-05 07:50:12.796543567 +0100
-@@ -15,7 +15,7 @@ md5sums=('c52f463585d85924b28cdc1e373ae0
+commit c2b53366543f54989525dbfb944fed4d7dec7677
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 00:56:36 2020 +0800
+
+    [stage2] cracklib: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 6da16ca..b5c59b0 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -14,7 +14,7 @@ md5sums=('48a0c8810ec4780b99c0a4f9931c21c6')
  
  build() {
-   cd $srcdir/$pkgname-$pkgver
+   cd $pkgname-$pkgver
 -  ./configure --prefix=/usr --sbindir=/usr/bin --without-python
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --sbindir=/usr/bin --without-python
    make 
  }
  
-@@ -30,6 +30,4 @@ package() {
+@@ -29,6 +29,4 @@ package() {
    # symlink cracklib-small #34778
-   mkdir -p $pkgdir/usr/share/dict
-   ln -sf /usr/share/cracklib/cracklib-small $pkgdir/usr/share/dict/cracklib-small
+   mkdir -p "$pkgdir"/usr/share/dict
+   ln -sf /usr/share/cracklib/cracklib-small "$pkgdir"/usr/share/dict/cracklib-small
 -  sh ./util/cracklib-format dicts/cracklib-small \
--    | sh ./util/cracklib-packer $pkgdir/usr/share/cracklib/pw_dict
+-    | sh ./util/cracklib-packer "$pkgdir"/usr/share/cracklib/pw_dict
  }
