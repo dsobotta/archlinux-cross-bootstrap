@@ -95,7 +95,7 @@ stage2_package_build() {
 
 stage2_package_install() {
   # install in chroot
-  yes | pacman --noscriptlet --config "$CHROOTDIR"/etc/pacman.conf \
+  yes | pacman --noscriptlet --overwrite '*' --config "$CHROOTDIR"/etc/pacman.conf \
     -r "$CHROOTDIR" -Syydd "$1" || return
 }
 
