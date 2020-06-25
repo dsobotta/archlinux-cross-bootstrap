@@ -1,11 +1,11 @@
-commit 517aec9f9d664f7ce227c5f3e842cfbfd7e99e60
+commit c5445e1b9f4f399c2f8e2b5d9bd4fbe72812b2ed
 Author: WANG Xuerui <git@xen0n.name>
 Date:   Fri Jun 26 01:36:07 2020 +0800
 
-    [stage2] shadow: fix patch and build
+    [stage2] shadow: fix patch and build -- wtf libpam is not found?
 
 diff --git a/PKGBUILD b/PKGBUILD
-index be0c3d9..8d88482 100644
+index be0c3d9..d36e268 100644
 --- a/PKGBUILD
 +++ b/PKGBUILD
 @@ -8,7 +8,7 @@ pkgdesc="Password and account management tool suite with support for shadow file
@@ -40,14 +40,25 @@ index be0c3d9..8d88482 100644
 -    --enable-man \
 +    --disable-man \
      --disable-account-tools-setuid \
-     --with-libpam \
+-    --with-libpam \
++    --without-libpam \
      --with-group-name-max-length=32 \
 -    --with-audit \
 +    --without-audit \
      --without-selinux
  
    make
-@@ -122,22 +125,6 @@ package() {
+@@ -99,7 +102,8 @@ package() {
+   install -Dm644 "$srcdir/login.defs" "$pkgdir/etc/login.defs"
+ 
+   # PAM config - custom
+-  rm "$pkgdir/etc/pam.d"/*
++  rm -f "$pkgdir/etc/pam.d"/*
++  mkdir -p "$pkgdir/etc/pam.d"
+   install -t "$pkgdir/etc/pam.d" -m644 "$srcdir"/{passwd,chgpasswd,chpasswd,newusers}
+ 
+   # PAM config - from tarball
+@@ -122,22 +126,6 @@ package() {
    # but we keep newgrp, as sg is really an alias to it
    mv "$pkgdir"/usr/bin/{newgrp,sg}
  
