@@ -1,34 +1,57 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-23 18:16:06.761523611 +0300
-+++ b/PKGBUILD	2019-01-23 18:17:00.599374851 +0300
-@@ -50,6 +50,8 @@ pkgver() {
- prepare() {
-   cd "$pkgname"
- 
-+  sed -i "/SUBDIRS/s/man//g" Makefile.am
+commit 517aec9f9d664f7ce227c5f3e842cfbfd7e99e60
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 01:36:07 2020 +0800
+
+    [stage2] shadow: fix patch and build
+
+diff --git a/PKGBUILD b/PKGBUILD
+index be0c3d9..8d88482 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -8,7 +8,7 @@ pkgdesc="Password and account management tool suite with support for shadow file
+ arch=('x86_64')
+ url='https://github.com/shadow-maint/shadow'
+ license=('BSD')
+-depends=('pam' 'acl' 'audit' 'libaudit.so')
++depends=('pam' 'acl')
+ makedepends=('git' 'itstool' 'libxslt' 'docbook-xsl')
+ backup=(etc/login.defs
+         etc/pam.d/{chage,passwd,shadow,useradd,usermod,userdel}
+@@ -55,6 +55,8 @@ prepare() {
+   for commit in "${backports[@]}"; do
+     git cherry-pick -n "$commit"
+   done
 +
-   local backports=(
-     # Fix usermod crash
-     73a876a05612c278da747faeaeea40c3b8d34a53
-@@ -74,12 +76,13 @@ build() {
++  sed -i "/SUBDIRS/s/man//g" Makefile.am
+ }
  
+ build() {
+@@ -62,17 +64,18 @@ build() {
+ 
+   autoreconf -fisv
    ./configure \
-     LIBS="-lcrypt" \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
      --prefix=/usr \
      --bindir=/usr/bin \
      --sbindir=/usr/bin \
      --libdir=/usr/lib \
      --mandir=/usr/share/man \
+     --sysconfdir=/etc \
 -    --enable-man \
 +    --disable-man \
-     --sysconfdir=/etc \
+     --disable-account-tools-setuid \
      --with-libpam \
      --with-group-name-max-length=32 \
-@@ -133,20 +136,6 @@ package() {
+-    --with-audit \
++    --without-audit \
+     --without-selinux
+ 
+   make
+@@ -122,22 +125,6 @@ package() {
+   # but we keep newgrp, as sg is really an alias to it
    mv "$pkgdir"/usr/bin/{newgrp,sg}
  
-   # ...and their many man pages
+-  # ...and their many man pages
 -  find "$pkgdir"/usr/share/man \
 -      '(' -name 'chsh.1'    -o \
 -          -name 'chfn.1'    -o \
@@ -43,6 +66,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 -  rmdir \
 -      "$pkgdir"/usr/share/man/{fi,id,zh_TW}/man1 \
 -      "$pkgdir"/usr/share/man/{fi,ko/man8}
- 
+-
    # move everything else to /usr/bin, because this isn't handled by ./configure
    mv "$pkgdir"/usr/sbin/* "$pkgdir"/usr/bin
+   rmdir "$pkgdir/usr/sbin"
