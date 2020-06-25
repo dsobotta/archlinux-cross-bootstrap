@@ -4,10 +4,10 @@ Date:   Thu Jun 25 21:28:15 2020 +0800
 
     [stage2] gdbm: fix build on gcc-10
 
-diff --git a/gdbm/trunk/PKGBUILD b/gdbm/trunk/PKGBUILD
+diff --git a/PKGBUILD b/PKGBUILD
 index 6366b50..13eda57 100644
---- a/gdbm/trunk/PKGBUILD
-+++ b/gdbm/trunk/PKGBUILD
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -11,14 +11,24 @@ url='https://www.gnu.org/software/gdbm/gdbm.html'
  license=(GPL3)
  arch=(x86_64)
@@ -36,11 +36,11 @@ index 6366b50..13eda57 100644
    make
  }
  
-diff --git a/gdbm/trunk/gcc10-no-common.patch b/gdbm/trunk/gcc10-no-common.patch
+diff --git a/gcc10-no-common.patch b/gcc10-no-common.patch
 new file mode 100644
 index 0000000..2fa11c2
 --- /dev/null
-+++ b/gdbm/trunk/gcc10-no-common.patch
++++ b/gcc10-no-common.patch
 @@ -0,0 +1,18 @@
 +--- a/src/parseopt.c	2018-05-30 17:39:15.000000000 +0800
 ++++ b/src/parseopt.c	2020-06-25 21:23:46.116666426 +0800
