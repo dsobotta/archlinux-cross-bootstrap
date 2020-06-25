@@ -1,15 +1,24 @@
---- a/PKGBUILD	2018-02-24 21:54:37.769350140 +0100
-+++ b/PKGBUILD	2018-02-26 18:19:33.801102562 +0100
-@@ -12,7 +12,7 @@ pkgdesc="An URL retrieval utility and li
+commit d00bd3fddc407a943ac0e578a195f3cdb84dbc35
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Thu Jun 25 21:50:23 2020 +0800
+
+    [stage2] curl: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 6287b85..0cd5da5 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -11,8 +11,7 @@ pkgdesc="An URL retrieval utility and library"
  arch=('x86_64')
  url="https://curl.haxx.se"
  license=('MIT')
--depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
+-depends=('ca-certificates' 'krb5' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2'
+-         'libidn2' 'libidn2.so')
 +depends=('ca-certificates' 'libssh2' 'openssl' 'zlib' 'libpsl' 'libnghttp2')
  provides=('libcurl.so')
- options=('strip' 'debug')
  source=("https://curl.haxx.se/download/$pkgname-$pkgver.tar.gz"{,.asc})
-@@ -25,6 +25,7 @@ build() {
+ sha512sums=('c983a2a71bf5037a0f2b7f55b7638fbc1f43b4bd56db5c407ae42482b0dc9b94ae90a108c48e0526a5fa580d992d9c1a96b35d35f82ba0d4c982f9bf5ab695f6'
+@@ -23,6 +22,7 @@ build() {
    cd "$pkgname-$pkgver"
  
    ./configure \
