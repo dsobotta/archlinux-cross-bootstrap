@@ -1,22 +1,37 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-23 18:08:03.100897205 +0300
-+++ b/PKGBUILD	2019-01-23 18:15:09.397148132 +0300
+commit 6d2e0e7a6a85e00c267ba05d9917e8a48fa2f18e
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 00:49:01 2020 +0800
+
+    [stage2] libcap: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index bcc617c..713445e 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -9,7 +9,7 @@ pkgdesc='POSIX 1003.1e capabilities'
- arch=('x86_64')
- url='http://sites.google.com/site/fullycapable/'
- license=('GPL2')
--depends=('glibc' 'attr')
-+depends=('glibc' 'attr' 'pam' 'unixodbc' 'linux-api-headers')
- makedepends=('linux-api-headers')
- validpgpkeys=('38A644698C69787344E954CE29EE848AE2CCF3F4') # Andrew G. Morgan <morgan@kernel.org>
+ arch=(x86_64)
+ url='https://sites.google.com/site/fullycapable/'
+ license=(GPL2)
+-depends=(glibc attr)
++depends=(glibc attr pam unixodbc linux-api-headers)
+ makedepends=(linux-api-headers)
+ provides=(libcap.so)
  source=(https://kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-$pkgver.tar.{xz,sign})
-@@ -26,7 +26,8 @@ prepare() {
+@@ -27,11 +27,16 @@ prepare() {
  }
+ 
+ _makeargs=(
+-  KERNEL_HEADERS=/usr/include
++  KERNEL_HEADERS=@SYSROOT@/usr/include
+   RAISE_SETFCAP=no
+   SBINDIR=/usr/bin
+   lib=lib
+   prefix=/usr
++  BUILD_CC=gcc
++  BUILD_CFLAGS=""
++  CC=@CHOST@-gcc
++  AR=@CHOST@-ar
++  RANLIB=@CHOST@-ranlib
+ )
  
  build() {
--  make -C $pkgname-$pkgver KERNEL_HEADERS=/usr/include
-+  make -C $pkgname-$pkgver KERNEL_HEADERS=@SYSROOT@/usr/include \
-+    BUILD_CC=gcc BUILD_CFLAGS="" CC=@CHOST@-gcc AR=@CHOST@-ar RANLIB=@CHOST@-ranlib
- }
- 
- package() {
