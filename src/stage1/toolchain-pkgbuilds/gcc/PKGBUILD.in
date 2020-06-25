@@ -101,4 +101,10 @@ package() {
   rm -r "$pkgdir"/usr/share/man/man7
   rm -r "$pkgdir"/usr/share/info
   rm -r "$pkgdir"/usr/share/gcc-*
+
+  # Adjust to /usr/SYSROOT/usr/*
+  mkdir "$pkgdir"/usr/@CHOST@/usr
+  mv "$pkgdir"/usr/@CHOST@/{,usr/}lib
+  mv "$pkgdir"/usr/@CHOST@/{,usr/}include
+  ln -s usr/include "$pkgdir"/usr/@CHOST@/include
 }
