@@ -1,17 +1,15 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-29 01:28:04.406090964 +0300
-+++ b/PKGBUILD	2019-01-29 01:37:25.770910696 +0300
-@@ -12,7 +12,7 @@ url="https://www.kernel.org/pub/linux/ut
- arch=('x86_64')
- makedepends=('systemd' 'python' 'libcap-ng')
- license=('GPL2')
--options=('strip' 'debug')
-+options=('debug')
- validpgpkeys=('B0C64D14301CC6EFAEDF60E4E4B71D5EEC39C284')  # Karel Zak
- source=("https://www.kernel.org/pub/linux/utils/util-linux/v$_pkgmajor/$pkgbase-$pkgver.tar."{xz,sign}
-         pam-{login,common,runuser,su}
-@@ -35,6 +35,8 @@ build() {
-   cd "$pkgbase-$pkgver"
+commit ec101ba9699a535483dad2cef81563580acb219b
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 01:30:17 2020 +0800
+
+    [stage2] util-linux: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 1ec605a..efd8b33 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -41,6 +41,8 @@ build() {
+   # https://github.com/karelzak/util-linux/issues/808
  
    ./configure \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
@@ -19,33 +17,34 @@ diff -rupN a/PKGBUILD b/PKGBUILD
      --prefix=/usr \
      --libdir=/usr/lib \
      --bindir=/usr/bin \
-@@ -46,7 +48,7 @@ build() {
-     --enable-chfn-chsh \
+@@ -55,7 +57,7 @@ build() {
      --enable-write \
      --enable-mesg \
+     --disable-hardlink \
 -    --with-python=3
 +    --without-python
  
    make
  }
-@@ -55,7 +57,7 @@ package_util-linux() {
+@@ -64,7 +66,7 @@ package_util-linux() {
    conflicts=('rfkill')
    provides=('rfkill')
    replaces=('rfkill')
--  depends=('pam' 'shadow' 'coreutils' 'libsystemd' 'libcap-ng' 'libutil-linux')
+-  depends=('pam' 'shadow' 'coreutils' 'systemd-libs' 'libcap-ng' 'libutil-linux')
 +  depends=('pam' 'shadow' 'coreutils' 'libcap-ng' 'libutil-linux')
    optdepends=('python: python bindings to libmount'
                'words: default dictionary for look')
-   groups=('base' 'base-devel')
-@@ -84,7 +86,6 @@ package_util-linux() {
+   backup=(etc/pam.d/chfn
+@@ -92,7 +94,7 @@ package_util-linux() {
    install -m644 "$srcdir/pam-su" "$pkgdir/etc/pam.d/su-l"
  
    # TODO(dreisner): offer this upstream?
 -  sed -i '/ListenStream/ aRuntimeDirectory=uuidd' "$pkgdir/usr/lib/systemd/system/uuidd.socket"
++  #sed -i '/ListenStream/ aRuntimeDirectory=uuidd' "$pkgdir/usr/lib/systemd/system/uuidd.socket"
  
    # adjust for usrmove
    # TODO(dreisner): fix configure.ac upstream so that this isn't needed
-@@ -110,6 +111,7 @@ package_util-linux() {
+@@ -118,6 +120,7 @@ package_util-linux() {
  
  package_libutil-linux() {
    pkgdesc="util-linux runtime libraries"
