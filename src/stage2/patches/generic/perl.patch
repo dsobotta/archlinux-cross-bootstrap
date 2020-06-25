@@ -1,39 +1,46 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-12-07 12:48:09.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 13:40:42.140431951 +0300
+commit bbb5e6cbb8b827840db4d42996d69deb1448c31d
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Thu Jun 25 21:37:29 2020 +0800
+
+    [stage2] perl: refresh pkgbuild
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 1e560a6..f8f52bc 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -7,6 +7,7 @@
  pkgname=perl
- pkgver=5.28.1
+ pkgver=5.32.0
  _baseversion="${pkgver%.*}"
-+_crossversion=1.2.1
++_crossversion=1.3.4
  pkgrel=1
  pkgdesc="A highly capable, feature-rich programming language"
  arch=(x86_64)
-@@ -133,6 +134,7 @@ provides=('perl-archive-tar=2.30'
+@@ -130,6 +131,7 @@ provides=('perl-archive-tar=2.36'
  # Add your own provides here
- provides=(${provides[@]})
+ provides=("${provides[@]}")
  source=(https://www.cpan.org/src/5.0/perl-${pkgver}.tar.xz
 +        https://github.com/arsv/perl-cross/releases/download/${_crossversion}/perl-cross-${_crossversion}.tar.gz
          perlbin.sh
          perlbin.csh
          perlbin.fish
-@@ -140,6 +142,7 @@ source=(https://www.cpan.org/src/5.0/per
+@@ -137,6 +139,7 @@ source=(https://www.cpan.org/src/5.0/perl-${pkgver}.tar.xz
          detect-old-perl-modules.hook)
  options=('makeflags' '!purge' 'emptydirs')
- sha512sums=('6d18e9684c3a15bea2ccd28f116d1829c3acd5547551ee3539f0060c0d1a75246dfe570dfb9d5f00625a994a0afb0cbd6a5a5f9a407fef75a421e7dbc6491b43'
-+            '26ea586e442f71cefe1e46a22fb8d03683df00a4e958b75394170ccebbf862ca09108fc822364bfcaa1c486fe073640aa2b6a078f8fd54685196203d90edbce5'
-             '46724344828e7f86e016f9c8d588bf52b2e764e65e0acc1a38899a530c99bc6e4fd8b46fa0d4bbd685aa2074dd5bcbf9029ac3bb3f2d0ee9adfc4f6c0745f373'
-             'fc1344a02c741d61af6f6b5967f29cc6f43c2059761522b150261924dd7e1989da5254c03ffa0627accd9af01bc152edd24e84a6b59579acb9ee1900b6ce9383'
+ sha512sums=('1540247415893bbd94dfeede7b4fba6052688dc0bf27ced817f448246fcdc6e9a6486abc34577dec5b00bf02ed607b2d24ccd4977c3b3c51e8e6edfc0b81c760'
++            '7e1fc7b2b19d8c2e2fb8615e074e218b2e1a4d276b563ffabccfd0c7398bc8680fca96da89cc61d611993f38a2c67dfbb0201c58658e05437395ad8c00d31874'
+             'b7678078d64cc593a3503c45f023c49915d0d703f1cea8282f4191f1e3aa62764cc6cfcae3dc3828101415b8e15d5ed8b1b79d423ef387550ae33172b0de92bc'
+             '53eb0cddfd637014f3d3a101665db8dcafe5ac5bf3d319a259974334eb89c1c405097518ae96b6d18e520194633c7be57c9b2cd9ae6398443eb08f1a2008d112'
              '881e2efe05ba818cd7300f126800b56bb0685cb5c9c5fb7e67ef6aaf5abd17d2391a979d5d16d109c5111f4b35504ba83d19b0e6eda4431e8421fcbea19d2f1a'
-@@ -153,6 +156,7 @@ prepare() {
-   # test broken with gdbm 1.15. See: https://rt.perl.org/Public/Bug/Display.html?id=133295
-   sed -i 's|BEGIN {|BEGIN { plan(skip_all => "fatal test unsupported with gdbm 1.15");|' ext/GDBM_File/t/fatal.t
+@@ -146,6 +149,7 @@ sha512sums=('1540247415893bbd94dfeede7b4fba6052688dc0bf27ced817f448246fcdc6e9a64
  
+ prepare() {
+   cd "${srcdir}/${pkgname}-${pkgver}"
 +  tar --strip-components=1 -zxf ${srcdir}/perl-cross-${_crossversion}.tar.gz
  }
  
  build() {
-@@ -166,7 +170,7 @@ build() {
+@@ -159,7 +163,7 @@ build() {
      arch_opts=""
    fi
  
@@ -42,17 +49,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
      -Dprefix=/usr -Dvendorprefix=/usr \
      -Dprivlib=/usr/share/perl5/core_perl \
      -Darchlib=/usr/lib/perl5/$_baseversion/core_perl \
-@@ -180,7 +184,8 @@ build() {
-     -Dinc_version_list=none \
-     -Dman1ext=1perl -Dman3ext=3perl ${arch_opts} \
-     -Dlddlflags="-shared ${LDFLAGS}" -Dldflags="${LDFLAGS}"
--  make
-+  MAKEFLAGS=""
-+  make miniperl; make
- }
- 
- check() {
-@@ -224,7 +229,7 @@ package() {
+@@ -220,7 +224,7 @@ package() {
    install -d -m755 "$pkgdir/usr/bin/site_perl"
  
    #(cd ${pkgdir}/usr/bin; mv perl${pkgver} perl)
