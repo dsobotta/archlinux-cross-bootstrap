@@ -1,0 +1,41 @@
+diff -rupN a/makepkg.conf b/makepkg.conf
+--- a/makepkg.conf	2019-01-10 10:23:19.000000000 +0300
++++ b/makepkg.conf	2019-02-05 18:00:10.061913699 +0300
+@@ -32,13 +32,13 @@ VCSCLIENTS=('bzr::bzr'
+ # ARCHITECTURE, COMPILE FLAGS
+ #########################################################################
+ #
+-CARCH="x86_64"
+-CHOST="x86_64-pc-linux-gnu"
++CARCH="mips64el"
++CHOST="mips64el-unknown-linux-gnuabi64"
+ 
+ #-- Compiler and Linker Flags
+ CPPFLAGS="-D_FORTIFY_SOURCE=2"
+-CFLAGS="-march=x86-64 -mtune=generic -O2 -pipe -fno-plt"
+-CXXFLAGS="-march=x86-64 -mtune=generic -O2 -pipe -fno-plt"
++CFLAGS="-march=mips64r2 -mabi=64 -O2 -pipe -fstack-protector-strong -fno-plt"
++CXXFLAGS="-march=mips64r2 -mabi=64 -O2 -pipe -fstack-protector-strong -fno-plt"
+ LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+ #-- Make Flags: change this for DistCC/SMP systems
+ #MAKEFLAGS="-j2"
+diff -rupN a/PKGBUILD b/PKGBUILD
+--- a/PKGBUILD	2019-01-10 10:23:19.000000000 +0300
++++ b/PKGBUILD	2019-02-05 18:00:10.061913699 +0300
+@@ -27,13 +27,14 @@ source=(https://sources.archlinux.org/ot
+ sha256sums=('ce4eef1585fe64fd1c65c269e263577261edd7535fe2278240103012d74b6ef6'
+             'SKIP'
+             'b82e9c1073292766c2f49b5c771dddf37383f1151117ef9cd5e0c11047b4f3eb'
+-            '8442bbb3d1d83f09610e9d687f9121037d97c6acaa06c4e907fc6e9eb0b127ec')
++            'a16de1551dee95db27aa0fc18c417bf099aa717162d64c1354ba1885e5bbc88b')
+ 
+ build() {
+   cd "$pkgname-$pkgver"
+ 
+   ./configure --prefix=/usr --sysconfdir=/etc \
+-    --localstatedir=/var --enable-doc \
++    --host=@CHOST@ --build=@BUILDHOST@ \
++    --localstatedir=/var --disable-doc \
+     --with-scriptlet-shell=/usr/bin/bash \
+     --with-ldconfig=/usr/bin/ldconfig
+   make V=1
