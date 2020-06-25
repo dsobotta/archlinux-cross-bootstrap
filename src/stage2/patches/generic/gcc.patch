@@ -109,18 +109,17 @@ index 4debfa7..2e240aa 100644
        --with-isl \
        --with-linker-hash-style=gnu \
        --with-system-zlib \
-@@ -92,8 +109,8 @@ build() {
+@@ -92,8 +109,7 @@ build() {
        --enable-gnu-unique-object \
        --enable-install-libiberty \
        --enable-linker-build-id \
 -      --enable-lto \
 -      --enable-multilib \
 +      --@MULTILIB@-multilib \
-+      --disable-libgomp \
        --enable-plugin \
        --enable-shared \
        --enable-threads=posix \
-@@ -104,9 +121,6 @@ build() {
+@@ -104,9 +120,6 @@ build() {
        gdc_include_dir=/usr/include/dlang/gdc
  
    make
@@ -130,7 +129,7 @@ index 4debfa7..2e240aa 100644
  }
  
  check() {
-@@ -122,11 +136,11 @@ check() {
+@@ -122,11 +135,11 @@ check() {
  
  package_gcc-libs() {
    pkgdesc='Runtime libraries shipped by GCC'
@@ -145,7 +144,7 @@ index 4debfa7..2e240aa 100644
  
    cd gcc-build
    make -C $CHOST/libgcc DESTDIR="$pkgdir" install-shared
-@@ -134,25 +148,17 @@ package_gcc-libs() {
+@@ -134,25 +147,17 @@ package_gcc-libs() {
  
    for lib in libatomic \
               libgfortran \
@@ -172,7 +171,7 @@ index 4debfa7..2e240aa 100644
               libquadmath; do
      make -C $CHOST/$lib DESTDIR="$pkgdir" install-info
    done
-@@ -183,22 +189,22 @@ package_gcc() {
+@@ -183,22 +188,22 @@ package_gcc() {
    install -m755 -t "$pkgdir/${_libdir}/" gcc/{cc1,cc1plus,collect2,lto1}
  
    make -C $CHOST/libgcc DESTDIR="$pkgdir" install
@@ -200,7 +199,7 @@ index 4debfa7..2e240aa 100644
  
    make DESTDIR="$pkgdir" install-fixincludes
    make -C gcc DESTDIR="$pkgdir" install-mkheaders
-@@ -209,23 +215,21 @@ package_gcc() {
+@@ -209,23 +214,21 @@ package_gcc() {
      "$pkgdir/usr/lib/bfd-plugins/"
  
    make -C $CHOST/libgomp DESTDIR="$pkgdir" install-nodist_{libsubinclude,toolexeclib}HEADERS
@@ -229,7 +228,7 @@ index 4debfa7..2e240aa 100644
  
    make -C libcpp DESTDIR="$pkgdir" install
    make -C gcc DESTDIR="$pkgdir" install-po
-@@ -276,84 +280,6 @@ package_gcc-fortran() {
+@@ -276,84 +279,6 @@ package_gcc-fortran() {
      "$pkgdir/usr/share/licenses/$pkgname/"
  }
  
@@ -314,7 +313,7 @@ index 4debfa7..2e240aa 100644
  package_lib32-gcc-libs() {
    pkgdesc='32-bit runtime libraries shipped by GCC'
    depends=('lib32-glibc>=2.27')
-@@ -368,21 +294,14 @@ package_lib32-gcc-libs() {
+@@ -368,21 +293,14 @@ package_lib32-gcc-libs() {
  
    for lib in libatomic \
               libgfortran \
@@ -337,7 +336,7 @@ index 4debfa7..2e240aa 100644
    # remove files provided by gcc-libs
    rm -rf "$pkgdir"/usr/lib
  
-@@ -390,29 +309,3 @@ package_lib32-gcc-libs() {
+@@ -390,29 +308,3 @@ package_lib32-gcc-libs() {
    install -Dm644 "$srcdir/gcc/COPYING.RUNTIME" \
      "$pkgdir/usr/share/licenses/lib32-gcc-libs/RUNTIME.LIBRARY.EXCEPTION"
  }
