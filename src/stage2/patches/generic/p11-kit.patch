@@ -1,16 +1,39 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-24 15:46:12.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 16:26:27.029434148 +0300
-@@ -33,10 +33,11 @@ prepare() {
+commit 3d9d80eca87be726d47159723332357dd4f0385f
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Thu Jun 25 23:21:44 2020 +0800
+
+    [stage2] p11-kit: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 7fe27f5..ec640e3 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -20,9 +20,27 @@ prepare() {
+ }
+ 
  build() {
-   cd p11-kit
-   ./configure --prefix=/usr \
-+    --host=@CHOST@ --build=@BUILDHOST@ \
-     --sysconfdir=/etc \
-     --localstatedir=/var \
-     --libexecdir=/usr/lib \
--    --enable-doc \
-+    --disable-doc \
-     --with-module-path=/usr/lib/pkcs11 \
-     --with-trust-paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source
-   make
++  cat > cross-file << EOF
++[binaries]
++c = '@CHOST@-gcc'
++cpp = '@CHOST@-g++'
++ar = '@CHOST@-ar'
++strip = '@CHOST@-strip'
++pkgconfig = 'pkg-config'
++[host_machine]
++system = 'linux'
++cpu_family = '@CARCH@'
++cpu = '@GCC_MARCH@'
++endian = 'little'
++EOF
++
++  export PKG_CONFIG_LIBDIR="@SYSROOT@/usr/lib/pkgconfig"
++  export PKG_CONFIG_SYSROOT_DIR="@SYSROOT@"
++
+   arch-meson p11-kit build \
++    --cross-file cross-file \
+     --buildtype debugoptimized \
+-    -D gtk_doc=true \
++    -D gtk_doc=false \
+     -D man=true \
+     -D trust_paths=/etc/ca-certificates/trust-source:/usr/share/ca-certificates/trust-source
+   ninja -C build
