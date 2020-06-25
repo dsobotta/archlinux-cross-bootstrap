@@ -1,11 +1,11 @@
-commit 0db0ff970f4e7c2b33ea7bc3a4f28e4a422eca99
+commit bf9854fa008d8e8ddb8ce0d7f80d02f4d0668b48
 Author: WANG Xuerui <git@xen0n.name>
 Date:   Thu Jun 25 16:51:24 2020 +0800
 
     glibc: mips64el stage2 patch
 
 diff --git a/PKGBUILD b/PKGBUILD
-index 7cc6d22..b62dbe7 100644
+index 7cc6d22..1adff43 100644
 --- a/PKGBUILD
 +++ b/PKGBUILD
 @@ -5,7 +5,8 @@
@@ -18,6 +18,15 @@ index 7cc6d22..b62dbe7 100644
  pkgver=2.31
  pkgrel=5
  arch=(x86_64)
+@@ -15,7 +16,7 @@ makedepends=(git gd lib32-gcc-libs python)
+ options=(!strip staticlibs)
+ #source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+ _commit=18fdba553dd9b907e9812b90d2cea593f776058f
+-source=(git+https://sourceware.org/git/glibc.git#commit=$_commit
++source=(git+https://gitee.com/mirrors/glibc_source.git#commit=$_commit
+         locale.gen.txt
+         locale-gen
+         lib32-glibc.conf
 @@ -50,17 +51,15 @@ prepare() {
  build() {
    local _configure_flags=(
