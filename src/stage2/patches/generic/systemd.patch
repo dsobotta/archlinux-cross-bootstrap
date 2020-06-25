@@ -1,19 +1,26 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-29 01:23:12.877313492 +0300
-+++ b/PKGBUILD	2019-01-29 10:49:29.378805039 +0300
-@@ -14,9 +14,9 @@ makedepends=('acl' 'cryptsetup' 'docbook
+commit bfe6b86a4bc7e2a40f6fbb426d3b52ab9bbc4da3
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Thu Jun 25 23:32:42 2020 +0800
+
+    [stage2] systemd: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 1016c45..e8eec45 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -13,9 +13,9 @@ makedepends=('acl' 'cryptsetup' 'docbook-xsl' 'gperf' 'lz4' 'xz' 'pam' 'libelf'
               'intltool' 'iptables' 'kmod' 'libcap' 'libidn2' 'libgcrypt'
               'libmicrohttpd' 'libxslt' 'util-linux' 'linux-api-headers'
               'python-lxml' 'quota-tools' 'shadow' 'gnu-efi-libs' 'git'
 -             'meson' 'libseccomp' 'pcre2' 'audit' 'kexec-tools' 'libxkbcommon'
 +             'meson' 'libseccomp' 'pcre2' 'kexec-tools' 'libxkbcommon'
-              'bash-completion')
+              'bash-completion' 'p11-kit' 'systemd')
 -options=('strip')
 +depends=('util-linux' 'libutil-linux' 'pcre2' 'libidn' 'libseccomp' 'kmod')
  validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'  # Lennart Poettering <lennart@poettering.net>
                '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E') # Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
- source=(# fragment is latest tag for source verification, final merge in prepare()
-@@ -103,6 +103,20 @@ pkgver() {
+ source=("git+https://github.com/systemd/systemd-stable#tag=${_tag}?signed"
+@@ -118,6 +118,20 @@ prepare() {
  }
  
  build() {
@@ -34,26 +41,27 @@ diff -rupN a/PKGBUILD b/PKGBUILD
    local _timeservers=({0..3}.arch.pool.ntp.org)
    local _nameservers=(
      # We use these public name services, ordered by their
-@@ -119,10 +133,17 @@ build() {
-   )
- 
+@@ -136,11 +150,17 @@ build() {
    local _meson_options=(
+     -Dversion-tag="${pkgver}-${pkgrel}-arch"
+ 
 -    -Dgnu-efi=true
 +    -Dgnu-efi=false
      -Dima=false
      -Dlibidn2=true
      -Dlz4=true
+-    -Dman=true
++    -Dman=false
 +    -Dlibcryptsetup=false
 +    -Dlibiptc=false
 +    -Dxkbcommon=false
 +    -Dlibcurl=false
-+    -Dman=false
 +    -Dtests=false
 +    -Daudit=false
  
-     -Ddbuspolicydir=/usr/share/dbus-1/system.d
-     -Ddefault-hierarchy=hybrid
-@@ -136,7 +157,9 @@ build() {
+     # We disable DNSSEC by default, it still causes trouble:
+     # https://github.com/systemd/systemd/issues/10579
+@@ -159,7 +179,9 @@ build() {
      -Dsysvrcnd-path=
    )
  
@@ -64,25 +72,25 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  
    ninja -C build
  }
-@@ -151,7 +174,7 @@ package_systemd() {
-   groups=('base-devel')
-   depends=('acl' 'bash' 'cryptsetup' 'dbus' 'iptables' 'kbd' 'kmod' 'hwids' 'libcap'
-            'libgcrypt' 'libsystemd' 'libidn2' 'lz4' 'pam' 'libelf' 'libseccomp'
--           'util-linux' 'xz' 'pcre2' 'audit')
-+           'util-linux' 'xz' 'pcre2')
+@@ -175,7 +197,7 @@ package_systemd() {
+            'iptables' 'kbd' 'kmod' 'libkmod.so' 'hwids' 'libcap' 'libcap.so'
+            'libgcrypt' 'systemd-libs' 'libidn2' 'libidn2.so' 'lz4' 'pam'
+            'libelf' 'libseccomp' 'libseccomp.so' 'util-linux' 'libblkid.so'
+-           'libmount.so' 'xz' 'pcre2' 'audit' 'libaudit.so' 'libp11-kit'
++           'libmount.so' 'xz' 'pcre2' 'libp11-kit'
+            'libp11-kit.so')
    provides=('nss-myhostname' "systemd-tools=$pkgver" "udev=$pkgver")
    replaces=('nss-myhostname' 'systemd-tools' 'udev')
-   conflicts=('nss-myhostname' 'systemd-tools' 'udev')
-@@ -180,20 +203,20 @@ package_systemd() {
-   rm -rv "$pkgdir"/etc/systemd/system/*
+@@ -203,20 +225,20 @@ package_systemd() {
+   DESTDIR="$pkgdir" meson install -C build
  
    # we'll create this on installation
 -  rmdir "$pkgdir"/var/log/journal/remote
 +  rm -rf "$pkgdir"/var/log/journal/remote
  
-   # runtime libraries shipped with libsystemd
-   install -d -m0755 libsystemd
-   mv "$pkgdir"/usr/lib/lib{nss,systemd,udev}*.so* libsystemd
+   # runtime libraries shipped with systemd-libs
+   install -d -m0755 systemd-libs
+   mv "$pkgdir"/usr/lib/lib{nss,systemd,udev}*.so* systemd-libs
  
    # manpages shipped with systemd-sysvcompat
 -  rm "$pkgdir"/usr/share/man/man8/{halt,poweroff,reboot,runlevel,shutdown,telinit}.8
@@ -96,8 +104,8 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 +  rm -f "$pkgdir"/usr/{bin/resolvconf,share/man/man1/resolvconf.1}
  
    # avoid a potential conflict with [core]/filesystem
-   rm "$pkgdir"/usr/share/factory/etc/nsswitch.conf
-@@ -252,8 +275,8 @@ package_systemd-resolvconf() {
+   rm "$pkgdir"/usr/share/factory/etc/{issue,nsswitch.conf}
+@@ -277,8 +299,8 @@ package_systemd-resolvconf() {
    install -d -m0755 "$pkgdir"/usr/bin
    ln -s resolvectl "$pkgdir"/usr/bin/resolvconf
  
@@ -108,7 +116,7 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  }
  
  package_systemd-sysvcompat() {
-@@ -263,8 +286,8 @@ package_systemd-sysvcompat() {
+@@ -287,8 +309,8 @@ package_systemd-sysvcompat() {
    conflicts=('sysvinit')
    depends=('systemd')
  
