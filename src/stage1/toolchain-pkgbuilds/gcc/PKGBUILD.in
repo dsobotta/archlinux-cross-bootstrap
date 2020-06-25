@@ -40,6 +40,9 @@ prepare() {
   # Arch Linux installs 64bit libraries in /lib
   patch -Np1 -i "$srcdir"/gcc-pure64.patch
 
+  # same for mips64
+  sed -i '/\.\.\/lib64/s/lib64/lib/' gcc/config/mips/t-linux64
+
   # hack! - some configure tests for header files using "$CPP $CPPFLAGS"
   sed -i "/ac_cpp=/s/\$CPPFLAGS/\$CPPFLAGS -O2/" "$srcdir"/gcc/{libiberty,gcc}/configure
 

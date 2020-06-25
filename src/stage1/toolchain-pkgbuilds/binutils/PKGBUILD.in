@@ -26,6 +26,7 @@ build() {
 
   ./configure --target=$_target \
               --prefix=/usr \
+              --with-lib-path=/usr/lib:/usr/local/lib \
               --with-sysroot=/usr/$_target \
               --disable-werror \
               --disable-nls \
