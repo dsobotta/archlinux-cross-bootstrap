@@ -2,9 +2,8 @@
 
 _target=@CHOST@
 pkgname=$_target-glibc
-pkgver=2.27
-pkgrel=1
-_commit=23158b08a0908f381459f273a984c6fd328363cb
+pkgver=2.31
+pkgrel=5
 pkgdesc="GNU C Library @CARCH@ target"
 arch=('x86_64')
 url='http://www.gnu.org/software/libc/'
@@ -12,9 +11,10 @@ license=('GPL' 'LGPL')
 depends=($_target-gcc $_target-linux-api-headers)
 options=(!buildflags !strip staticlibs)
 source=(http://ftp.gnu.org/gnu/libc/glibc-$pkgver.tar.xz{,.sig})
-sha1sums=('1f7a9c43026484943ef7cf6885f2176a2bc1e093'
+sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
           'SKIP')
-validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8)  # "Carlos O'Donell <carlos@systemhalted.org>"
+validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
+              BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 
 prepare() {
   mkdir -p glibc-build lib32-glibc-build
