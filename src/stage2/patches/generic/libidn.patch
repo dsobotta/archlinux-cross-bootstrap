@@ -1,11 +1,18 @@
---- a/PKGBUILD	2018-02-14 19:35:45.186526524 +0100
-+++ b/PKGBUILD	2018-02-14 19:36:21.936985739 +0100
-@@ -26,7 +26,7 @@ prepare() {
+commit 590bc82638a3845ac9a4bc8eb48aa7a102365bfe
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 01:19:47 2020 +0800
+
+    [stage2] libidn: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index a7cc507..2a75011 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -26,6 +26,7 @@ build() {
+   cd "${pkgname}-${pkgver}"
  
- build() {
-   cd ${pkgname}-${pkgver}
--  ./configure --prefix=/usr
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
+   ./configure \
++    --host=@CHOST@ --build=@BUILDHOST@ \
+     --prefix=/usr
    make
  }
- 
