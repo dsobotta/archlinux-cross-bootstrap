@@ -4,11 +4,11 @@ Date:   Thu Jun 25 16:22:53 2020 +0800
 
     mips64el stage2 patch
 
-diff --git a/gcc/trunk/0001-pthread-reentrant.patch b/gcc/trunk/0001-pthread-reentrant.patch
+diff --git a/0001-pthread-reentrant.patch b/0001-pthread-reentrant.patch
 new file mode 100644
 index 0000000..455af08
 --- /dev/null
-+++ b/gcc/trunk/0001-pthread-reentrant.patch
++++ b/0001-pthread-reentrant.patch
 @@ -0,0 +1,11 @@
 +--- trunk/gcc/config/riscv/linux.h     2018/01/03 10:03:58     256169
 ++++ trunk/gcc/config/riscv/linux.h     2018/02/13 11:21:01     257621
@@ -21,10 +21,10 @@ index 0000000..455af08
 + #define LINK_SPEC "\
 + -melf" XLEN_SPEC "lriscv \
 + %{shared} \
-diff --git a/gcc/trunk/PKGBUILD b/gcc/trunk/PKGBUILD
+diff --git a/PKGBUILD b/PKGBUILD
 index 4debfa7..2e240aa 100644
---- a/gcc/trunk/PKGBUILD
-+++ b/gcc/trunk/PKGBUILD
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -5,7 +5,8 @@
  # toolchain build order: linux-api-headers->glibc->binutils->gcc->binutils->glibc
  # NOTE: libtool requires rebuilt with each new gcc version
