@@ -43,6 +43,7 @@ build() {
 
   export BUILD_CC=gcc
   export CC="${_target}-gcc @PLATFORM_CFLAGS@"
+  export CXX=""
   export AR=${_target}-ar
   export RANLIB=${_target}-ranlib
 
@@ -62,13 +63,14 @@ build() {
   sed -i "/build-programs=/s#no#yes#" configparms
 
   echo "CC += -D_FORTIFY_SOURCE=2" >> configparms
-  echo "CXX += -D_FORTIFY_SOURCE=2" >> configparms
+  echo "CXX =" >> configparms
   make
 
   [ "x@MULTILIB@" == "xenable" ] || return 0
 
   cd "$srcdir/lib32-glibc-build"
   export CC="${_target}-gcc @PLATFORM32_CFLAGS@"
+  export CXX=""
 
   echo "slibdir=/usr/lib32" >> configparms
   echo "rtlddir=/usr/lib32" >> configparms
@@ -96,7 +98,7 @@ build() {
   sed -i "/build-programs=/s#no#yes#" configparms
 
   echo "CC += -D_FORTIFY_SOURCE=2" >> configparms
-  echo "CXX += -D_FORTIFY_SOURCE=2" >> configparms
+  echo "CXX =" >> configparms
   make
 
 }
