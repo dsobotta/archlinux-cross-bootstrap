@@ -1,11 +1,19 @@
---- a/PKGBUILD	2018-02-16 08:07:12.100498831 +0100
-+++ b/PKGBUILD	2018-02-16 08:10:02.378659844 +0100
-@@ -18,7 +18,7 @@ validpgpkeys=('1F42418905D8206AA754CCDC2
+commit c08395c67fcf451750a3118e082d1d4c3e4dc2a0
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 10:38:43 2020 +0800
+
+    [stage2] libtasn1: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 3849bea..cb6de7c 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -17,7 +17,7 @@ validpgpkeys=('1F42418905D8206AA754CCDC29EE58B996865171') #Nikos Mavrogiannopoul
  
  build() {
    cd ${pkgname}-${pkgver}
--  ./configure --prefix=/usr \
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr \
-       --with-packager=Archlinux \
-       --with-packager-bug-reports="http://bugs.archlinux.org/" \
-       --with-packager-version=${pkgver}-${pkgrel}
+-  ./configure --prefix=/usr
++  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
+   CODE_COVERAGE_LDFLAGS=${LDFLAGS} make
+ }
+ 
