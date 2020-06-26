@@ -1,17 +1,16 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-11-08 14:53:25.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 14:29:44.946293593 +0300
-@@ -21,6 +21,7 @@ prepare() {
-   cd "${srcdir}/${pkgname}-${pkgver}"
-   patch -p1 -i "$srcdir"/gnulib-fflush.patch
-   patch -p1 -i "$srcdir"/gnulib-makedev.patch
-+  autoreconf --install
- }
- 
- build() {
-@@ -30,7 +31,7 @@ build() {
+commit 50abf9a865b92dd535a7bea33e83c60675db8ab2
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 12:56:41 2020 +0800
+
+    [stage2] findutils: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 4e2ac8b..0c10bca 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -21,7 +21,7 @@ build() {
    # which is a secure version of locate.
-   sed -i '/^SUBDIRS/s/locate//' Makefile.in
+   sed -e '/^SUBDIRS/s/locate//' -e 's/frcode locate updatedb//' -i Makefile.in
  
 -  ./configure --prefix=/usr
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr
