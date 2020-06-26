@@ -52,11 +52,11 @@ stage1 || die -e "$ERROR_BUILDFAIL" "Stage 1 failed. Exiting..."
 . "$TOPSRCDIR"/stage2/stage2.sh
 stage2 || die -e "$ERROR_BUILDFAIL" "Stage 2 failed. Exiting..."
 
-exit 0
-
 # shellcheck source=src/stage3/stage3.sh
 . "$TOPSRCDIR"/stage3/stage3.sh
 stage3 || die -e "$ERROR_BUILDFAIL" "Stage 3 failed. Exiting..."
+
+exit 0
 
 # shellcheck source=src/stage4/stage4.sh
 . "$TOPSRCDIR"/stage4/stage4.sh
