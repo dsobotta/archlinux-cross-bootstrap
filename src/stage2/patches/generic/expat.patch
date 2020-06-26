@@ -1,12 +1,24 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-09-11 21:53:17.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 17:56:44.079867459 +0300
-@@ -17,7 +17,7 @@ sha256sums=('17b43c2716d521369f82fc2dc70
+commit b5db9a4de8000d4782ebd5600153286d2d724f88
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 11:17:13 2020 +0800
+
+    [stage2] expat: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index c548516..8eedd54 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -18,7 +18,12 @@ sha256sums=('f1063084dc4302a427dabcca499c8312b3a32a29b7d2506653ecc8f950a9a237'
  
  build() {
    cd $pkgname-$pkgver
--  ./configure --prefix=/usr --disable-static
-+  ./configure --prefix=/usr --disable-static --host=@CHOST@ --build=@BUILDHOST@ --without-docbook
-   make
+-  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -S . -B build
++  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
++    -DCMAKE_C_COMPILER=@CHOST@-gcc \
++    -DCMAKE_LINKER=@CHOST@-ld \
++    -DEXPAT_BUILD_EXAMPLES=0 \
++    -DEXPAT_BUILD_TESTS=0 \
++    -S . -B build
+   cmake --build build
  }
  
