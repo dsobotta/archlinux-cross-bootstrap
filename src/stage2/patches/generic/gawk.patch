@@ -1,9 +1,17 @@
---- a/PKGBUILD	2018-02-20 11:28:47.260891678 +0100
-+++ b/PKGBUILD	2018-02-20 11:29:03.356079065 +0100
-@@ -19,7 +19,7 @@ validpgpkeys=('D1967C63788713177D861ED7D
+commit 0bf574a0c4789d11c939d19270cf3d8ceeb96ce4
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 12:59:46 2020 +0800
+
+    [stage2] gawk: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 9661360..85e1060 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -18,7 +18,7 @@ validpgpkeys=('D1967C63788713177D861ED7DF597815937EC0D2') # Arnold Robbins
  
  build() {
-   cd ${srcdir}/${pkgname}-${pkgver}
+   cd ${pkgname}-${pkgver}
 -  ./configure --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc --without-libsigsegv
 +  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc --without-libsigsegv
    make
