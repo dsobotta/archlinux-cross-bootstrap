@@ -1,8 +1,24 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-23 17:36:16.827394862 +0300
-+++ b/PKGBUILD	2019-01-23 17:49:59.605906163 +0300
-@@ -25,7 +25,7 @@ build() {
-   export CFLAGS=${CFLAGS/-fno-plt} # fix make check with i686 
+commit 2acae7a553bbd9c79b53cd8b7b1a00dbd013e715
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 12:03:17 2020 +0800
+
+    [stage2] elfutils: remove libmicrohttpd dep
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 5618ab3..2bbdcd1 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -10,7 +10,7 @@ pkgdesc='Utilities to handle ELF object files and DWARF debugging information'
+ arch=(x86_64)
+ url='https://sourceware.org/elfutils/'
+ license=(LGPL3 GPL GPL3)
+-makedepends=(gcc-libs zlib bzip2 xz libmicrohttpd sqlite libarchive curl)
++makedepends=(gcc-libs zlib bzip2 xz sqlite libarchive curl)
+ options=(staticlibs)
+ source=(https://sourceware.org/elfutils/ftp/${pkgver}/elfutils-${pkgver}.tar.bz2{,.sig})
+ sha512sums=('62e96035ccfe8928baca2285decbe8b8703a2daa956df81ece18fecf643272fb68955806b3e807a514141a7a9bf44520bf09461672aa580bd6807485fb604d25'
+@@ -22,7 +22,7 @@ build() {
+   cd $pkgbase-$pkgver
  
    CFLAGS+=" -g"  # required for test-suite success
 -  ./configure --prefix=/usr --program-prefix="eu-" --enable-deterministic-archives
@@ -10,3 +26,12 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  
    make
  }
+@@ -35,7 +35,7 @@ check() {
+ }
+ 
+ package_elfutils() {
+-  depends=(gcc-libs zlib bzip2 xz libmicrohttpd sqlite libarchive curl
++  depends=(gcc-libs zlib bzip2 xz sqlite libarchive curl
+            "libelf=$pkgver-$pkgrel")
+ 
+   cd $pkgbase-$pkgver
