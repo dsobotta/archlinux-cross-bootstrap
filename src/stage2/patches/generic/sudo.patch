@@ -1,15 +1,23 @@
---- a/PKGBUILD	2018-02-24 21:00:44.772836909 +0100
-+++ b/PKGBUILD	2018-02-26 18:21:18.315946756 +0100
-@@ -12,7 +12,7 @@ arch=('x86_64')
+commit d1ff806c0e0dc60c64f91b43c27dfff3641aeb67
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 16:48:59 2020 +0800
+
+    [stage2] sudo: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 322ae12..2da9d60 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -11,7 +11,7 @@ arch=('x86_64')
  url="https://www.sudo.ws/sudo/"
  license=('custom')
  groups=('base-devel')
 -depends=('glibc' 'libgcrypt' 'pam' 'libldap')
 +depends=('glibc' 'libgcrypt' 'pam')
- backup=('etc/sudoers' 'etc/pam.d/sudo')
- install=$pkgname.install
- source=(https://www.sudo.ws/sudo/dist/$pkgname-$_sudover.tar.gz{,.sig}
-@@ -30,6 +30,7 @@ build() {
+ backup=('etc/pam.d/sudo'
+         'etc/sudo.conf'
+         'etc/sudo_logsrvd.conf'
+@@ -34,6 +34,7 @@ build() {
    cd "$srcdir/$pkgname-$_sudover"
  
    ./configure \
@@ -17,7 +25,7 @@
      --prefix=/usr \
      --sbindir=/usr/bin \
      --libexecdir=/usr/lib \
-@@ -40,8 +41,7 @@ build() {
+@@ -44,8 +45,7 @@ build() {
      --enable-tmpfiles.d \
      --with-pam \
      --with-sssd \
