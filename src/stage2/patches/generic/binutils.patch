@@ -1,7 +1,14 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-06-20 07:56:40.877881835 +0200
-+++ b/PKGBUILD	2018-06-20 11:07:26.331329370 +0200
-@@ -51,6 +51,7 @@ build() {
+commit cdba5bb67443a699ceacfb5065b7157ca46838a3
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 14:33:13 2020 +0800
+
+    [stage2] binutils: disable debuginfod and gold
+
+diff --git a/PKGBUILD b/PKGBUILD
+index d832ca8..70173b3 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -39,24 +39,24 @@ build() {
    cd binutils-build
  
    "$srcdir/binutils-gdb/configure" \
@@ -9,9 +16,21 @@ diff -rupN a/PKGBUILD b/PKGBUILD
      --prefix=/usr \
      --with-lib-path=/usr/lib:/usr/local/lib \
      --with-bugurl=https://bugs.archlinux.org/ \
-@@ -66,7 +67,7 @@ build() {
+     --enable-cet \
+     --enable-deterministic-archives \
+-    --enable-gold \
++    --disable-gold \
+     --enable-ld=default \
+     --enable-lto \
+     --enable-plugins \
+     --enable-relro \
+     --enable-shared \
+-    --enable-targets=x86_64-pep \
+     --enable-threads \
      --disable-gdb \
      --disable-werror \
+-    --with-debuginfod \
++    --with-debuginfod=no \
      --with-pic \
 -    --with-system-zlib
 +    --with-system-zlib=@SYSROOT@/usr/lib/libz.so
