@@ -45,4 +45,5 @@ export TOPSRCDIR="$startdir"/src
 export SRCDEST="$startdir"/sources
 
 # build options
-export REGEN_CONFIG_FRAGMENTS=yes
+# mips64el has been around for a long time so this is unnecessary most of the time
+#export REGEN_CONFIG_FRAGMENTS=yes
