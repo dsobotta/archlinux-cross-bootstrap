@@ -1,11 +1,11 @@
-commit 2acae7a553bbd9c79b53cd8b7b1a00dbd013e715
+commit 5c5c027d8cde02111d9b8ebceace7d4ac9905dec
 Author: WANG Xuerui <git@xen0n.name>
 Date:   Fri Jun 26 12:03:17 2020 +0800
 
     [stage2] elfutils: remove libmicrohttpd dep
 
 diff --git a/PKGBUILD b/PKGBUILD
-index 5618ab3..2bbdcd1 100644
+index 5618ab3..38fd3c7 100644
 --- a/PKGBUILD
 +++ b/PKGBUILD
 @@ -10,7 +10,7 @@ pkgdesc='Utilities to handle ELF object files and DWARF debugging information'
@@ -22,7 +22,7 @@ index 5618ab3..2bbdcd1 100644
  
    CFLAGS+=" -g"  # required for test-suite success
 -  ./configure --prefix=/usr --program-prefix="eu-" --enable-deterministic-archives
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --program-prefix="eu-" --enable-deterministic-archives
++  ./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --program-prefix="eu-" --enable-deterministic-archives --disable-debuginfod
  
    make
  }
