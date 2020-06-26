@@ -1,14 +1,21 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-05-19 05:17:04.163532745 +0200
-+++ b/PKGBUILD	2018-05-19 05:23:49.323536788 +0200
-@@ -31,8 +31,8 @@ build() {
-   # CVE-2016-3189
-   patch -Np1 -i "${srcdir}/fix-heap-use-after-free-bzip2recover.patch"
+commit 9eb7ab4a89714d6f74fd9dcf5e25e5e36f18e2af
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 12:35:52 2020 +0800
+
+    [stage2] bzip2: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 3de6fb9..2ed63a9 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -17,8 +17,8 @@ validpgpkeys=('EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A') # Mark Wielaard <mark@
+ build() {
+   cd $pkgname-$pkgver
  
--  make -f Makefile-libbz2_so
--  make bzip2 bzip2recover
-+  make CC=@CHOST@-gcc RANLIB=@CHOST@-ranlib AR=@CHOST@-ar -f Makefile-libbz2_so
-+  make CC=@CHOST@-gcc RANLIB=@CHOST@-ranlib AR=@CHOST@-ar bzip2 bzip2recover
+-  make -f Makefile-libbz2_so CC="gcc $CFLAGS $LDFLAGS"
+-  make bzip2 bzip2recover CC="gcc $CFLAGS $LDFLAGS"
++  make -f Makefile-libbz2_so CC="@CHOST@-gcc $CFLAGS $LDFLAGS" RANLIB=@CHOST@-ranlib AR=@CHOST@-ar
++  make bzip2 bzip2recover CC="@CHOST@-gcc $CFLAGS $LDFLAGS" RANLIB=@CHOST@-ranlib AR=@CHOST@-ar
  }
  
  check() {
