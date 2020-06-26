@@ -1,10 +1,17 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2018-09-11 23:43:33.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 15:55:39.903928119 +0300
-@@ -30,12 +30,13 @@ pkgver() {
+commit 55f40e464b0fb10d207bc0faf9b2519d1add9991
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 13:15:35 2020 +0800
+
+    [stage2] libtool: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 10b6445..12005c7 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -44,12 +44,13 @@ prepare() {
+   git config --local submodule.gl-mod/bootstrap.url "$srcdir/gnulib-bootstrap"
+   git submodule update
  
- prepare() {
-   cd libtool
 +  sed -i 's/depth 365/depth 1024/' ./bootstrap
    ./bootstrap
  }
