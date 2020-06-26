@@ -58,6 +58,7 @@ CHOST="$CHOST"
 CFLAGS="${PLATFORM_CFLAGS[*]} -O2 -pipe -fstack-protector-strong -fno-plt"
 CXXFLAGS="${PLATFORM_CFLAGS[*]} -O2 -pipe -fstack-protector-strong -fno-plt"
 MAKEFLAGS="-j$(($(nproc) + 1))"
+LDFLAGS="$LDFLAGS -Wl,-rpath-link=/usr/${CHOST}/usr/lib"
 EOF
 
   check_repo "$PKGDEST" cross || make_repo "$PKGDEST" cross
