@@ -1,14 +1,22 @@
---- a/PKGBUILD	2018-02-20 14:26:45.612481607 +0100
-+++ b/PKGBUILD	2018-02-20 14:28:37.776428772 +0100
-@@ -13,6 +13,7 @@ pkgdesc="A C library that implements an
+commit 4548e304353c31b1cf70f6c8c14b6b363f72af0f
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 11:25:57 2020 +0800
+
+    [stage2] sqlite: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 34a38a4..8ecfeb7 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -12,6 +12,7 @@ pkgdesc="A C library that implements an SQL database engine"
  arch=('x86_64')
  license=('custom:Public Domain')
- url="http://www.sqlite.org/"
+ url="https://www.sqlite.org/"
 +depends=('tcl')
  makedepends=('tcl' 'readline' 'zlib')
- source=(https://www.sqlite.org/2018/sqlite-src-${_srcver}.zip
-         https://www.sqlite.org/2018/sqlite-doc-${_docver}.zip
-@@ -38,7 +39,7 @@ build() {
+ source=(https://www.sqlite.org/2020/sqlite-src-${_srcver}.zip
+         https://www.sqlite.org/2020/sqlite-doc-${_docver}.zip
+@@ -37,7 +38,7 @@ build() {
  
    # build sqlite
    cd sqlite-src-$_srcver
@@ -17,7 +25,7 @@
  	--disable-static \
  	--disable-amalgamation \
  	--enable-fts3 \
-@@ -47,6 +48,7 @@ build() {
+@@ -46,6 +47,7 @@ build() {
  	--enable-rtree \
  	--enable-json1 \
  	TCLLIBDIR=/usr/lib/sqlite$pkgver
