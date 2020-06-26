@@ -1,21 +1,27 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-24 00:32:27.172846412 +0300
-+++ b/PKGBUILD	2019-01-24 00:34:50.527143344 +0300
-@@ -8,7 +8,7 @@ url="https://www.gnu.org/software/gettex
+commit ebe863144b5fc569a2a1d6ba19d8ec5c892cf118
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 13:04:30 2020 +0800
+
+    [stage2] gettext: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index d83ea93..c938f82 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -8,7 +8,7 @@ url="https://www.gnu.org/software/gettext/"
  arch=(x86_64)
  license=(GPL)
- groups=(base base-devel)
+ groups=(base-devel)
 -depends=(gcc-libs acl sh glib2 libunistring libcroco)
 +depends=(gcc-libs acl sh glib2 libunistring)
  makedepends=(gettext emacs git)
  optdepends=('git: for autopoint infrastructure updates')
  options=(!docs)
-@@ -26,11 +26,12 @@ prepare() {
- 
+@@ -22,10 +22,12 @@ validpgpkeys=('462225C3B46F34879FC8496CD605848ED7E69871'  # Daiki Ueno
  build() {
    cd $pkgname-$pkgver
--  ./configure \
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ \
+   ./configure \
++    --host=@CHOST@ --build=@BUILDHOST@ \
      --prefix=/usr \
      --enable-csharp \
      --enable-nls \
