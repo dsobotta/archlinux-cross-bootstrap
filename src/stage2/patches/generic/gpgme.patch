@@ -1,18 +1,25 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-23 23:01:32.170731545 +0300
-+++ b/PKGBUILD	2019-01-24 02:01:16.900415240 +0300
+commit ca770fb7cd2a90d00ab5cdfb3ba55b8a2ff29868
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 16:17:06 2020 +0800
+
+    [stage2] gpgme: fix patch and build
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 4c11d99..6bf803f 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -3,7 +3,7 @@
  # Contributor: Sarah Hay <sarah@archlinux.org>
  
  pkgbase=gpgme
--pkgname=(gpgme qgpgme python-gpgme python2-gpgme)
+-pkgname=(gpgme qgpgme python-gpgme)
 +pkgname=(gpgme)
- pkgver=1.12.0
- pkgrel=1
- pkgdesc="A C wrapper library for GnuPG"
-@@ -19,9 +19,11 @@ validpgpkeys=('D8692123C4065DEA5E0F3AB52
- build() {
-   cd ${pkgbase}-${pkgver}
+ pkgver=1.13.1
+ pkgrel=7
+ _python_ver=3.8
+@@ -22,15 +22,17 @@ build() {
+ 
+   export PYTHONHASHSEED=0
    ./configure \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
      --prefix=/usr \
@@ -21,8 +28,16 @@ diff -rupN a/PKGBUILD b/PKGBUILD
 +    --disable-gpg-test \
      --disable-gpgsm-test
    make
- }
-@@ -39,9 +41,9 @@ package_gpgme() {
+ 
+   # ensure reproducibility of .pyc files
+-  touch -d @$SOURCE_DATE_EPOCH lang/python/version.py
+-  touch -d @$SOURCE_DATE_EPOCH lang/python/python${_python_ver}-gpg/lib.linux-x86_64-${_python_ver}/gpg/gpgme.py
++  #touch -d @$SOURCE_DATE_EPOCH lang/python/version.py
++  #touch -d @$SOURCE_DATE_EPOCH lang/python/python${_python_ver}-gpg/lib.linux-x86_64-${_python_ver}/gpg/gpgme.py
+   
+   # .pyc files will be created if check() is used - generate them here
+   
+@@ -59,9 +61,9 @@ package_gpgme() {
    make DESTDIR="${pkgdir}" install
  
    # split qgpgme
