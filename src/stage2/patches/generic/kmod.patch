@@ -1,6 +1,14 @@
---- a/PKGBUILD	2018-02-20 09:41:46.223051294 +0100
-+++ b/PKGBUILD	2018-02-20 09:42:30.780492670 +0100
-@@ -27,8 +27,9 @@ build() {
+commit 187ed1dc047f5fc2676218555f46fa39d6f47c82
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 12:28:58 2020 +0800
+
+    [stage2] kmod: disable tool to sidestep link rpath issues
+
+diff --git a/PKGBUILD b/PKGBUILD
+index d8093dc..c9be48f 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -28,8 +28,11 @@ build() {
    cd "$pkgname-$pkgver"
  
    ./configure \
@@ -8,6 +16,21 @@
      --sysconfdir=/etc \
 -    --enable-gtk-doc \
 +    --disable-gtk-doc \
++    --disable-manpages \
++    --disable-tools \
      --with-xz \
-     --with-zlib
+     --with-zlib \
+     --with-openssl
+@@ -62,9 +65,9 @@ package() {
+   # extra directories
+   install -dm755 "$pkgdir"/{etc,usr/lib}/{depmod,modprobe}.d
  
+-  for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
+-    ln -s kmod "$pkgdir/usr/bin/$tool"
+-  done
++  #for tool in {ins,ls,rm,dep}mod mod{probe,info}; do
++  #  ln -s kmod "$pkgdir/usr/bin/$tool"
++  #done
+ 
+   # install depmod.d file for search/ dir
+   install -Dm644 "$srcdir/depmod-search.conf" "$pkgdir/usr/lib/depmod.d/search.conf"
