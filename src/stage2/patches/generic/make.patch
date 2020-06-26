@@ -1,21 +1,28 @@
---- a/PKGBUILD	2018-02-24 21:10:21.233328122 +0100
-+++ b/PKGBUILD	2018-02-26 18:14:31.968676490 +0100
+commit 73f67044c28a24f03819b0b17cefb19957cf0527
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 16:08:15 2020 +0800
+
+    [stage2] make: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 642e25f..02e7c54 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
 @@ -10,7 +10,7 @@ arch=('x86_64')
- url="http://www.gnu.org/software/make"
+ url="https://www.gnu.org/software/make"
  license=('GPL3')
  groups=('base-devel')
 -depends=('glibc' 'guile')
 +depends=('glibc')
- source=(ftp://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.bz2{,.sig}
-         guile-2.2.patch)
- md5sums=('15b012617e7c44c0ed482721629577ac'
-@@ -26,7 +26,8 @@ prepare() {
+ source=("https://ftp.gnu.org/gnu/${pkgname}/${pkgname}-${pkgver}.tar.lz"{,.sig})
+ md5sums=('d5c40e7bd1e97a7404f5d3be982f479a'
+          'SKIP')
+@@ -18,7 +18,7 @@ validpgpkeys=('6D4EEB02AD834703510B117680CB727A20C79BB2')   # Paul Smith
  
  build() {
-   cd ${pkgname}-${pkgver}
--  ./configure --prefix=/usr
-+  ./configure --host=@CHOST@ --build=@BUILDHOST@ --without-guile --prefix=/usr \
-+    LDFLAGS="-lc $LDFLAGS"
-   make
+ 	cd "${pkgname}-${pkgver}"
+-	./configure --prefix=/usr
++	./configure --host=@CHOST@ --build=@BUILDHOST@ --prefix=/usr --without-guile
+ 	make
  }
  
