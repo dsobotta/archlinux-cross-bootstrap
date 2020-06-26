@@ -1,7 +1,14 @@
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-27 16:44:24.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 17:39:41.176098865 +0300
-@@ -21,7 +21,11 @@ validpgpkeys=('0424D4EE81A0E3D119C6F835E
+commit 4dbb24bec5a0781033348033fd10884e6f4e169e
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 16:23:36 2020 +0800
+
+    [stage2] gnutls: disable guile
+
+diff --git a/PKGBUILD b/PKGBUILD
+index f10bf88..f1a3406 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -22,12 +22,16 @@ validpgpkeys+=('462225C3B46F34879FC8496CD605848ED7E69871') # "Daiki Ueno <ueno@u
  
  build() {
    cd ${pkgname}-${pkgver}
@@ -13,3 +20,9 @@ diff -rupN a/PKGBUILD b/PKGBUILD
  	--with-zlib \
  	--disable-static \
  	--with-idn \
+ 	--enable-openssl-compatibility \
+-	--enable-guile --with-guile-site-dir=no \
++	--disable-guile --with-guile-site-dir=no \
+ 	--with-default-trust-store-pkcs11="pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit"
+   sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+   make
