@@ -1,6 +1,36 @@
-diff -rupN a/makepkg.conf b/makepkg.conf
---- a/makepkg.conf	2019-01-10 10:23:19.000000000 +0300
-+++ b/makepkg.conf	2019-02-05 18:00:10.061913699 +0300
+commit dc4b49ce0642d559806e399ba0bfb340be7970b7
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Fri Jun 26 16:14:23 2020 +0800
+
+    [stage2] pacman: fix patch
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 98f2a5e..9f6b843 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -33,7 +33,7 @@ sha256sums=('1930c407265fd039cb3a8e6edc82f69e122aa9239d216d9d57b9d1b9315af312'
+             'e481a161bba76729cd434c97e0b319ddfcb1d93b2e4890d72b4e8a32982531d9'
+             '667ba659f85e3740fda9808e4751a44a63e0484072594d961b87e474c607b79c'
+             '3353f363088c73f1f86a890547c0f87c7473e5caf43bbbc768c2e9a7397f2aa2'
+-            '8c100b64450f5a19a16325dd05c143d49395bdeb96bd957f863cde4b95d3cb86')
++            'd9a3a9a565bfdfe9c05fb891c415f9fe113581e0a3c5caa32534ee4fba152863')
+ 
+ prepare() {
+   cd "$pkgname-$pkgver"
+@@ -46,7 +46,8 @@ build() {
+   cd "$pkgname-$pkgver"
+ 
+   ./configure --prefix=/usr --sysconfdir=/etc \
+-    --localstatedir=/var --enable-doc \
++    --host=@CHOST@ --build=@BUILDHOST@ \
++    --localstatedir=/var --disable-doc \
+     --with-scriptlet-shell=/usr/bin/bash \
+     --with-ldconfig=/usr/bin/ldconfig
+   make V=1
+diff --git a/makepkg.conf b/makepkg.conf
+index cecfd9d..094966a 100644
+--- a/makepkg.conf
++++ b/makepkg.conf
 @@ -32,13 +32,13 @@ VCSCLIENTS=('bzr::bzr'
  # ARCHITECTURE, COMPILE FLAGS
  #########################################################################
@@ -19,23 +49,3 @@ diff -rupN a/makepkg.conf b/makepkg.conf
  LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
  #-- Make Flags: change this for DistCC/SMP systems
  #MAKEFLAGS="-j2"
-diff -rupN a/PKGBUILD b/PKGBUILD
---- a/PKGBUILD	2019-01-10 10:23:19.000000000 +0300
-+++ b/PKGBUILD	2019-02-05 18:00:10.061913699 +0300
-@@ -27,13 +27,14 @@ source=(https://sources.archlinux.org/ot
- sha256sums=('ce4eef1585fe64fd1c65c269e263577261edd7535fe2278240103012d74b6ef6'
-             'SKIP'
-             'b82e9c1073292766c2f49b5c771dddf37383f1151117ef9cd5e0c11047b4f3eb'
--            '8442bbb3d1d83f09610e9d687f9121037d97c6acaa06c4e907fc6e9eb0b127ec')
-+            'a16de1551dee95db27aa0fc18c417bf099aa717162d64c1354ba1885e5bbc88b')
- 
- build() {
-   cd "$pkgname-$pkgver"
- 
-   ./configure --prefix=/usr --sysconfdir=/etc \
--    --localstatedir=/var --enable-doc \
-+    --host=@CHOST@ --build=@BUILDHOST@ \
-+    --localstatedir=/var --disable-doc \
-     --with-scriptlet-shell=/usr/bin/bash \
-     --with-ldconfig=/usr/bin/ldconfig
-   make V=1
