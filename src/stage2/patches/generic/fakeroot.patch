@@ -1,16 +1,25 @@
---- a/PKGBUILD	2018-02-21 21:52:04.800201713 +0100
-+++ b/PKGBUILD	2018-02-21 21:53:10.410318949 +0100
-@@ -31,14 +31,13 @@ build() {
+commit b9f83c817266399004ddd4c864060e87eb2b7666
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Sat Jun 27 13:16:06 2020 +0800
+
+    [stage2] fakeroot: build with tcp ipc to fix stage3 qemu ENOSYS
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 6462eaa..8f35d0d 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -30,14 +30,12 @@ build() {
    cd $pkgname-$pkgver
  
    ./configure --prefix=/usr \
 +    --host=@CHOST@ --build=@BUILDHOST@ \
      --libdir=/usr/lib/libfakeroot \
      --disable-static \
-     --with-ipc=sysv
+-    --with-ipc=sysv
++    --with-ipc=tcp
  
    make
- 
+-
 -  cd doc
 -  po4a -k 0 --rm-backups --variable 'srcdir=../doc/' po4a/po4a.cfg
  }
