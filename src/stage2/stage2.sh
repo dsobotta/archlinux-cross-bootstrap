@@ -134,6 +134,12 @@ stage2() {
   check_exe -r arch-meson asp awk bsdtar git gperf help2man pacman sed svn tar tclsh
 
   # build packages from deptree
+  # except skipping binutils installation because this would overwrite amd64 binaries
+  export __binutils_workaround=true
+  packages_build_all stage2_package_build stage2_package_install || return
+
+  # install binutils last
+  unset __binutils_workaround
   packages_build_all stage2_package_build stage2_package_install || return
 
   # cleanup

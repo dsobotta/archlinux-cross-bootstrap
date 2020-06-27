@@ -45,6 +45,13 @@ package_build() {
 
   deptree_is_satisfyable "$pkgname" || return 0
 
+  if [[ "x$__binutils_workaround" != x ]]; then
+    if [[ "$pkgname" == binutils ]]; then
+      echo "deferring installation of binutils until last packages are compiled"
+      return
+    fi
+  fi
+
   "$2" "$pkgname" || return
 
   deptree_remove "$pkgname"
