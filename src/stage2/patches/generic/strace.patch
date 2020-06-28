@@ -1,0 +1,29 @@
+commit a880c3d4c66c50b1c916e926b9a7022bd7bfc393
+Author: WANG Xuerui <git@xen0n.name>
+Date:   Mon Jun 29 01:16:23 2020 +0800
+
+    [stage2] strace: add to help debug fakeroot using sysv ipc even after patching
+
+diff --git a/PKGBUILD b/PKGBUILD
+index 70af789..5551751 100644
+--- a/PKGBUILD
++++ b/PKGBUILD
+@@ -8,7 +8,7 @@ pkgdesc='A diagnostic, debugging and instructional userspace tracer'
+ arch=(x86_64)
+ url='https://strace.io/'
+ license=(BSD)
+-depends=(perl libunwind)
++depends=(perl)
+ source=(https://github.com/strace/strace/releases/download/v$pkgver/strace-$pkgver.tar.xz{,.asc})
+ sha1sums=('95c9d5aa664982d53ce1e5ab058d8fb73e200f0c'
+           'SKIP')
+@@ -17,7 +17,8 @@ validpgpkeys=('296D6F29A020808E8717A8842DB5BD89A340AEB7') # Dmitry V. Levin <ldv
+ build() {
+   cd $pkgname-$pkgver
+   ./configure --prefix=/usr \
+-    --with-libunwind
++    --host=@CHOST@ --build=@BUILDHOST@ \
++    --without-libunwind
+   make
+ }
+ 
