@@ -2,7 +2,7 @@
 
 _target=@CHOST@
 pkgname=$_target-glibc
-pkgver=2.31
+pkgver=2.34
 pkgrel=5
 pkgdesc="GNU C Library @CARCH@ target"
 arch=('x86_64')
@@ -11,8 +11,8 @@ license=('GPL' 'LGPL')
 depends=($_target-gcc $_target-linux-api-headers)
 options=(!buildflags !strip staticlibs)
 source=(http://ftp.gnu.org/gnu/libc/glibc-$pkgver.tar.xz{,.sig})
-sha256sums=('9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17'
-          'SKIP')
+sha256sums=('SKIP'
+            'SKIP')
 validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
 

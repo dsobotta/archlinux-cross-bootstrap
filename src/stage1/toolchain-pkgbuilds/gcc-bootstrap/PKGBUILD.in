@@ -2,8 +2,8 @@
 
 _target=@CHOST@
 pkgname=$_target-gcc-bootstrap
-pkgver=10.1.0
-_islver=0.21
+pkgver=11.2.0
+_islver=0.23
 pkgrel=2
 pkgdesc='The GNU Compiler Collection - cross compiler for @CARCH@ target - bootstrap version. only used to build initial glibc and compiler'
 arch=(x86_64)
@@ -15,16 +15,16 @@ options=(!emptydirs !strip)
 provides=(${pkgname%-bootstrap})
 conflicts=(${pkgname%-bootstrap})
 source=(https://sourceware.org/pub/gcc/releases/gcc-${pkgver}/gcc-${pkgver}.tar.xz{,.sig}
-        http://isl.gforge.inria.fr/isl-$_islver.tar.xz
+        https://packages.debian.org/source/bookworm/isl/isl_$_islver.orig.tar.xz
         gcc-pure64.patch::https://gist.githubusercontent.com/alexforsale/a1339a64882ac7df065404f0af9bb639/raw/9586520039c5b83b96aadfff9aa206bd1bb6972d/gcc-pure64.patch
         0001-pthread-reentrant.patch)
 validpgpkeys=(F3691687D867B81B51CE07D9BBE43771487328A9  # bpiotrowski@archlinux.org
               13975A70E63C361C73AE69EF6EEB81F8981C74C7  # richard.guenther@gmail.com
               33C235A34C46AA3FFB293709A328C3A2C3C45C06) # Jakub Jelinek <jakub@redhat.com>
-sha256sums=('b6898a23844b656f1b68691c5c012036c2e694ac4b53a8918d4712ad876e7ea2'
+sha256sums=('SKIP'
             'SKIP'
-            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
-            'c7545a5faca9fc1aee47bd1a4e407e7a64ef1d4c4fb018ede0a5f5ffa16c33be'
+	    'SKIP'
+	    'c7545a5faca9fc1aee47bd1a4e407e7a64ef1d4c4fb018ede0a5f5ffa16c33be'
             'fc9c6f0edd615f2b39deff28b9626a08fd98ef8ce19f7e34281c0a5bd653ac3b')
 
 prepare() {
